@@ -8,6 +8,7 @@ import com.naughtyzombie.mache.Settings
  * Time: 10:02 AM
  */
 
+//Entry point.
 Settings settings = initialize(args)
 
 if (settings) {
