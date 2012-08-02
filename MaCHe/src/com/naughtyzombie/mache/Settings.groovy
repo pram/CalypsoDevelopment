@@ -12,6 +12,7 @@ class Settings {
     private String group
     private boolean execute
     private boolean clean
+    private boolean generatePom
     private String jarFile
     private String mvnLocation
 
@@ -59,8 +60,16 @@ class Settings {
         this.clean = clean
     }
 
+    def setGeneratePom(boolean generatePom) {
+        this.generatePom = generatePom
+    }
+
     boolean isClean() {
         return this.clean
+    }
+
+    boolean isGeneratePom() {
+        return this.generatePom
     }
 
     boolean isGenerate() {

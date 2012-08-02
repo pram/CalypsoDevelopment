@@ -28,11 +28,12 @@ def initialize(args) {
     // Create the list of settings.
     cli.with {
         h longOpt: 'help', 'Show usage information'
-        c longOpt: 'clean', 'Clean working directory (default: true)'
+        c longOpt: 'clean', 'Clean working directory' 
         l longOpt: 'label', args: 1, argName: 'labelName', 'Use the following label in Maven'
         r longOpt: 'repository', args: 1, argName: 'repositoryUrl', 'Use the following Maven repository'
         g longOpt: 'groupName', args: 1, argName: 'groupName', 'Add to the following group in the repository'
         x longOpt: 'execute', 'Execute script to deploy to Maven repository'
+	p longOpt: 'pom', 'Generate dependencies pom fragment to copy into pom.xml'
     }
 
     def options = cli.parse(args)
@@ -51,6 +52,7 @@ def initialize(args) {
         settings.setClean(options.c)
         if (options.arguments()[0]) settings.setJarFile(options.arguments()[0])
         if (System.env.M2_HOME) settings.setMavenLocation(System.env.M2_HOME )
+	if (options.p) settings.setGeneratePom(options.p)
 
         return settings
     }
