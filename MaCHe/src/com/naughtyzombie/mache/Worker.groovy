@@ -62,7 +62,7 @@ class Worker {
                     script.append(mvnPath)
                     script.append(' deploy:deploy-file ')
                     script.append("-DgroupId=${this.settings.getGroup()} ")
-                    script.append("-DartifactId=${it.getName()} ")
+                    script.append("-DartifactId=${it.getName().split('.jar')[0]} ")
                     script.append("-Dversion=${this.settings.getLabel()} ")
                     script.append('-Dpackaging=jar ')
                     script.append("-Dfile=${it.absolutePath} ")
