@@ -8,6 +8,7 @@ package com.naughtyzombie.mache
  */
 class Worker {
     final String GEN_SCRIPT = 'mvndeploy.script'
+    final String POM_FRAGMENT = 'pom.fragment'
 
     private Settings settings;
     private File workingDir;
@@ -109,5 +110,10 @@ class Worker {
         commandArray[1] = "-c"*/
         commandArray[0] = command
         return commandArray
+    }
+
+    def generatePomFragment() {
+        if (settings.isGeneratePom() {
+        }
     }
 }
