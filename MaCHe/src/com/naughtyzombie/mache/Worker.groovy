@@ -87,19 +87,8 @@ class Worker {
         }
     }
 
-    def executeLine(String line) {
-//        def sout = new StringBuffer(), serr = new StringBuffer()
-//        def proc = line.execute()
-        /*proc.waitForProcessOutput(sout, serr)
-        if (sout) println "out:\n$sout"
-        if (serr) println "err:\n$serr"*/
-//        proc.consumeProcessOutput(sout, serr)
-//        proc.waitForOrKill(1000)
-//        println "out> $sout err> $serr"
-        executeLine2(line)
-    }
 
-    def executeLine2(String command) {
+    def executeLine(String command) {
         return executeOnShell(command, this.workingDir)
     }
 
