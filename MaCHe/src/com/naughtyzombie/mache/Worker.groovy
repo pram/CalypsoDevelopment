@@ -113,7 +113,7 @@ class Worker {
     }
 
     def generatePomFragment() {
-        if (settings.isGeneratePom() {
+        if (settings.isGeneratePom()) {
         }
     }
 }
