@@ -1,5 +1,7 @@
 package com.naughtyzombie.mache
 
+import groovy.xml.MarkupBuilder
+
 /**
  * Created with IntelliJ IDEA.
  * User: Pram Attale
@@ -114,6 +116,31 @@ class Worker {
 
     def generatePomFragment() {
         if (settings.isGeneratePom()) {
+            final script = new File(this.workingDir, GEN_SCRIPT)
+            if (script.exists() && script.isFile()) {
+                final pomFrag = new File(this.workingDir, POM_FRAGMENT)
+                script.eachLine { line ->
+                    generateDependencyFragment(pomFrag, line)
+                }
+            } else {
+                println("Execution script has not been generated")
+                return
+            }
         }
+    }
+
+    private def generateDependencyFragment(File pomFragment, String line) {
+        def resultArray = line.split()
+
+        def writer = new StringWriter()
+        def xml = new MarkupBuilder(writer)
+        xml.copyunderhereo() {
+            dependency {
+                record(resultArray[3])
+                thing(resultArray[4])
+            }
+        }
+
+        pomFragment.append(writer.toString())
     }
 }

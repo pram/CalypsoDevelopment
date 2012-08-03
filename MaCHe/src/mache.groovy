@@ -18,6 +18,7 @@ if (settings) {
     worker.generateScript();
 
     if (settings.isExecute()) worker.execute()
+    if (settings.isGeneratePom()) worker.generatePomFragment()
 
     if (settings.isClean()) worker.cleanUp()
 }
