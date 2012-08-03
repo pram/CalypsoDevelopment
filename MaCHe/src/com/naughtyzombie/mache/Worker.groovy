@@ -119,6 +119,7 @@ class Worker {
             final script = new File(this.workingDir, GEN_SCRIPT)
             if (script.exists() && script.isFile()) {
                 final pomFrag = new File(this.workingDir, POM_FRAGMENT)
+                pomFrag.write(' ') //clear contents of file
                 script.eachLine { line ->
                     generateDependencyFragment(pomFrag, line)
                 }
@@ -134,13 +135,13 @@ class Worker {
 
         def writer = new StringWriter()
         def xml = new MarkupBuilder(writer)
-        xml.copyunderhereo() {
-            dependency {
-                record(resultArray[3])
-                thing(resultArray[4])
-            }
+        xml.dependency() {
+            groupId(resultArray[2].split('=')[1])
+            artifactId(resultArray[3].split('=')[1])
+            version(resultArray[4].split('=')[1])
         }
 
         pomFragment.append(writer.toString())
+        pomFragment.append('\n')
     }
 }
