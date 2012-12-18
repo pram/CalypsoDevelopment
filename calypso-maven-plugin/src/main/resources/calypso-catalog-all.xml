@@ -1,0 +1,35 @@
+<calypso-process-catalog>
+    <processes>
+        <process>
+            <name>AuthService</name>
+            <classname>com.calypso.apps.startup.StartAuthService</classname>
+            <description>Start the Auth Service</description>
+            <alias>AUTH</alias>
+        </process>
+        <process>
+            <name>DataServer</name>
+            <classname>com.calypso.apps.startup.StartDataServer</classname>
+            <description>Start the DataServer</description>
+            <alias>DS</alias>
+        </process>
+        <process>
+            <name>EventServer</name>
+            <classname>com.calypso.apps.startup.StartEventServer</classname>
+            <alias>ES</alias>
+        </process>
+        <process>
+            <name>CalculationServer</name>
+            <classname>com.calypso.apps.startup.StartCalculationServer</classname>
+            <description>ADHOC Calc Server</description>
+            <id>CS_AddHoc1</id>
+            <alias>CS</alias>
+        </process>
+        <process>
+            <name>CalculationServer</name>
+            <classname>com.calypso.apps.startup.StartCalculationServer</classname>
+            <description>Official Sensitivity Calc Server</description>
+            <id>CS_AddHoc2</id>
+            <alias>CS</alias>
+        </process>
+    </processes>
+</calypso-process-catalog>
