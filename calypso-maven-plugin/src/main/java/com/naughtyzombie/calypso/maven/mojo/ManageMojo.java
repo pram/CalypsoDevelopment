@@ -5,6 +5,7 @@ import com.naughtyzombie.calypso.maven.ui.CalypsoProcessSelector;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
 /**
@@ -46,22 +47,32 @@ public class ManageMojo extends AbstractMojo {
      */
     private String processCatalog;
 
+    /**
+     * The maven project.
+     *
+     * @parameter property="project"
+     * @readonly
+     */
+    private MavenProject project;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
 
-        CalypsoProcessRequest cpRequest = new CalypsoProcessRequest();
+        if (this.project.getParent() == null) {
 
-        if ( interactiveMode.booleanValue() ) {
-            getLog().info( "Generating project in Interactive mode" );
-        }
-        else {
-            getLog().info( "Generating project in Batch mode" );
-        }
+            CalypsoProcessRequest cpRequest = new CalypsoProcessRequest();
 
-        try {
-            cpSelector.selectProcess(cpRequest, interactiveMode, processCatalog);
-        } catch (PrompterException e) {
-            throw new MojoExecutionException("Incorrect entry", e);
+            if (interactiveMode.booleanValue()) {
+                getLog().info("Generating project in Interactive mode");
+            } else {
+                getLog().info("Generating project in Batch mode");
+            }
+
+            try {
+                cpSelector.selectProcess(cpRequest, interactiveMode, processCatalog);
+            } catch (PrompterException e) {
+                throw new MojoExecutionException("Incorrect entry", e);
+            }
         }
 
     }

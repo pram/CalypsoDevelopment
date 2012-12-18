@@ -68,76 +68,81 @@ public class StatusMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
 
-        CalypsoProcessRequest cpRequest = new CalypsoProcessRequest();
+        //Only run against parent project.
+        if (this.project.getParent() == null) {
 
-        Map<String, List<CalypsoProcess>> expectedProcesses = DefaultCalypsoProcessSelector.getProcessCatalog(processCatalog,calypsoProcessManager, null);
+            CalypsoProcessRequest cpRequest = new CalypsoProcessRequest();
 
-        List<CalypsoProcess> runningProcesses = cm.getRunningCalypsoProcesses();
+            Map<String, List<CalypsoProcess>> expectedProcesses = DefaultCalypsoProcessSelector.getProcessCatalog(processCatalog, calypsoProcessManager, null);
 
-        DataExporter exporter = new TextTableExporter();
-        exporter.addColumns(
-                new StringColumn("pid","PID",10,AlignType.MIDDLE_CENTER),
-                new StringColumn("classname","Class Name",70, AlignType.MIDDLE_CENTER),
-                new StringColumn("env", "ENV (expected[/running])", 30, AlignType.MIDDLE_CENTER),
-                new StringColumn("id", "Config", 30, AlignType.MIDDLE_CENTER)
-        );
+            List<CalypsoProcess> runningProcesses = cm.getRunningCalypsoProcesses();
 
-        if(verbose) {
+            DataExporter exporter = new TextTableExporter();
             exporter.addColumns(
-                    new StringColumn("jvmArgs","JVM Args",50,AlignType.MIDDLE_CENTER),
-                    new StringColumn("jvmFlags","JVM Flags",50,AlignType.MIDDLE_CENTER),
-                    new StringColumn("cmdLine","Command Line",50,AlignType.MIDDLE_CENTER)
+                    new StringColumn("pid", "PID", 10, AlignType.MIDDLE_CENTER),
+                    new StringColumn("classname", "Class Name", 70, AlignType.MIDDLE_CENTER),
+                    new StringColumn("env", "ENV (expected[/running])", 30, AlignType.MIDDLE_CENTER),
+                    new StringColumn("id", "Config", 30, AlignType.MIDDLE_CENTER)
             );
-        }
 
-        for (Map.Entry<String, List<CalypsoProcess>> entry : expectedProcesses.entrySet()) {
-            for (CalypsoProcess process : entry.getValue()) {
+            if (verbose) {
+                exporter.addColumns(
+                        new StringColumn("jvmArgs", "JVM Args", 50, AlignType.MIDDLE_CENTER),
+                        new StringColumn("jvmFlags", "JVM Flags", 50, AlignType.MIDDLE_CENTER),
+                        new StringColumn("cmdLine", "Command Line", 50, AlignType.MIDDLE_CENTER)
+                );
+            }
 
-                String pid = "Inactive";
-                String env = process.getEnv() != null ? process.getEnv() : "-";
+            for (Map.Entry<String, List<CalypsoProcess>> entry : expectedProcesses.entrySet()) {
+                for (CalypsoProcess process : entry.getValue()) {
 
-                if (runningProcesses.contains(process)) {
-                    CalypsoProcess calypsoProcess = runningProcesses.get(runningProcesses.indexOf(process));
-                    pid = String.valueOf(calypsoProcess.getPid());
-                    env = env + "/" + calypsoProcess.getEnv();
+                    String pid = "Inactive";
+                    String env = process.getEnv() != null ? process.getEnv() : "-";
+
+                    if (runningProcesses.contains(process)) {
+                        CalypsoProcess calypsoProcess = runningProcesses.get(runningProcesses.indexOf(process));
+                        pid = String.valueOf(calypsoProcess.getPid());
+                        env = env + "/" + calypsoProcess.getEnv();
+
+                        if (verbose) {
+                            process.setJvmArgs(calypsoProcess.getJvmArgs());
+                            process.setJvmFlags(calypsoProcess.getJvmFlags());
+                            process.setCommandLine(calypsoProcess.getCommandLine());
+                        }
+                    }
+
+                    List l = new LinkedList();
+                    l.add(pid);
+                    l.add(process.getClassName());
+                    l.add(env);
+                    l.add(process.getId());
 
                     if (verbose) {
-                        process.setJvmArgs(calypsoProcess.getJvmArgs());
-                        process.setJvmFlags(calypsoProcess.getJvmFlags());
-                        process.setCommandLine(calypsoProcess.getCommandLine());
+                        l.add(process.getJvmArgs());
+                        l.add(process.getJvmFlags());
+                        l.add(process.getCommandLine());
+                    }
+
+                    if (verbose) {
+                        exporter.addRows(new Row(
+                                pid,
+                                process.getClassName(),
+                                env, process.getId(),
+                                process.getJvmArgs(),
+                                process.getJvmFlags(),
+                                process.getCommandLine()));
+                    } else {
+                        exporter.addRows(new Row(
+                                pid,
+                                process.getClassName(),
+                                env, process.getId()));
                     }
                 }
-
-                List l = new LinkedList();
-                l.add(pid);
-                l.add(process.getClassName());
-                l.add(env);
-                l.add(process.getId());
-
-                if (verbose) {
-                    l.add(process.getJvmArgs());
-                    l.add(process.getJvmFlags());
-                    l.add(process.getCommandLine());
-                }
-
-                if (verbose) {
-                    exporter.addRows(new Row(
-                            pid,
-                            process.getClassName(),
-                            env, process.getId(),
-                            process.getJvmArgs(),
-                            process.getJvmFlags(),
-                            process.getCommandLine()));
-                } else {
-                    exporter.addRows(new Row(
-                            pid,
-                            process.getClassName(),
-                            env, process.getId()));
-                }
             }
-        }
 
-        exporter.finishExporting();
+            exporter.finishExporting();
+
+        }
 
     }
 }
