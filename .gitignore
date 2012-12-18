@@ -36,6 +36,8 @@ local.properties
 MaCHe/*.iml
 calypso-maven-plugin/calypso.iml
 out
+calypso-maven-plugin/calypso-maven-plugin.iml
+calypso-maven-plugin/target/
 
 
 #################
