@@ -67,6 +67,8 @@ This will create the project with the following structure.
             \---main
                 \---resources
 
+Copy the Calypso release jar that corresponds to the version number entered above into the `releases/src/main/resources` directory.  
+
 Navigate to the newly created project
 
     cd calypsoexample
