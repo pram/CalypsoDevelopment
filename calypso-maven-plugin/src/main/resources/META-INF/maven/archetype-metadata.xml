@@ -4,6 +4,7 @@
         <requiredProperty key="archetypeVersion">
             <defaultValue>1.0-SNAPSHOT</defaultValue>
         </requiredProperty>
+        <requiredProperty key="calypsoVersion"/>
     </requiredProperties>
     <modules>
         <module id="config" dir="config" name="config">
