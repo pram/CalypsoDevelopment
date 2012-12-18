@@ -35,6 +35,9 @@
                         <configuration>
                             <target>
                                 <unjar src="${project.basedir}/src/main/resources/calypsorel${calypso.version}.jar" dest="${calypso.unpacked.release}"/>
+                                <delete>
+                                    <fileset dir="${project.build.outputDirectory}" includes="**/*.jar"/>
+                                </delete>
                             </target>
                         </configuration>
                     </execution>
