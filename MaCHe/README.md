@@ -9,11 +9,11 @@ Requirements: Groovy 2.0+
 
 Usage: mache.groovy [settings] <jarfile>
 Options:
- -c,--clean                        Clean working directory
+ -c,--clean                        Clean working directory  
+ -g,--groupName <groupName>        Add to the following group in the repository  
+ -h,--help                         Show usage information  
+ -l,--label <labelName>            Use the following label in Maven  
+ -p,--pom                          Generate dependencies pom fragment to copy into pom.xml  
+ -r,--repository <repositoryUrl>   Use the following Maven repository  
+ -x,--execute                      Execute script to deploy to Maven repository  
 
- -g,--groupName <groupName>        Add to the following group in the repository
- -h,--help                         Show usage information
- -l,--label <labelName>            Use the following label in Maven
- -p,--pom                          Generate dependencies pom fragment to copy into pom.xml
- -r,--repository <repositoryUrl>   Use the following Maven repository
- -x,--execute                      Execute script to deploy to Maven repository
