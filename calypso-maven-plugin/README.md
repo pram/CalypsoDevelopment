@@ -18,7 +18,7 @@ To create a new Calypso project run the following command
 
     mvn archetype:generate -DarchetypeGroupId=com.naughtyzombie.calypso.maven -DarchetypeArtifactId=calypso-maven-plugin -DarchetypeVersion=1.0-SNAPSHOT -DgroupId=com.newinstall.calypso -DartifactId=calypsoexample -Dversion=1.0-SNAPSHOT
 
-Replace the values for the parameters `groupID`, `artifactId` and `version` with your desired values. This will create the project with the following structure. You will also be asked to enter the Calypso version that you will be working with. You can either add the following
+Replace the values for the parameters `groupID`, `artifactId` and `version` with your desired values. You will also be asked to enter the Calypso version that you will be working with. You can either add the following
 
     -DcalypsoVerision=XXxxxx[SPy]
 
@@ -26,6 +26,7 @@ to the archetype generation command above, or you will be asked to enter the ver
 
     Define value for property 'calypsoVersion': : 120000SP6
 
+This will create the project with the following structure.
 
 
     calypsoexample
