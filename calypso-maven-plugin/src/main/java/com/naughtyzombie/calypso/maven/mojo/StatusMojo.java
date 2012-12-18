@@ -43,14 +43,14 @@ public class StatusMojo extends AbstractMojo {
      *
      * To override use -DprocessCatalog="blah"
      *
-     * @parameter expression="${processCatalog}" default-value="FULL"
+     * @parameter property="processCatalog" default-value="FULL"
      */
     private String processCatalog;
 
     /**
      * Display full information about running processes
      *
-     * @parameter expression="${verbose}" default-value="false"
+     * @parameter property="verbose" default-value="false"
      */
     private boolean verbose;
 
@@ -60,7 +60,7 @@ public class StatusMojo extends AbstractMojo {
     /**
      * The maven project.
      *
-     * @parameter expression="${project}"
+     * @parameter property="project"
      * @readonly
      */
     private MavenProject project;

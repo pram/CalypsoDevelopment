@@ -33,7 +33,7 @@ public class ManageMojo extends AbstractMojo {
      * or<br><br>
      * mvn --batch-mode calypso:manage
      *
-     * @parameter expression="${interactiveMode}" default-value="${settings.interactiveMode}"
+     * @parameter property="interactiveMode" default-value="${settings.interactiveMode}"
      * @required
      */
     private Boolean interactiveMode;
@@ -42,7 +42,7 @@ public class ManageMojo extends AbstractMojo {
      * The process catalogs to use to build a list and let the user choose from.
      * Should be defined at compile time by the calling project
      *
-     * @parameter expression="${processCatalog}" default-value="ALL"
+     * @parameter property="processCatalog" default-value="ALL"
      */
     private String processCatalog;
 
