@@ -95,17 +95,17 @@ class GeneratePropertiesMojo extends GroovyMojo {
                         String contents = replacementFile.getText()
 
                         properties.each {prop ->
-                            log.info(prop.key + " = " + prop.value)
+                            log.debug(prop.key + " = " + prop.value)
                             contents = contents.replaceAll("@" + prop.key + "@", prop.value.toString())
                         }
 
                         replacementFile.write(contents)
 
-                        def common = replaceSet.intersect(properties.keySet())
-                        def diff = replaceSet.plus(properties.keySet())
-                        diff.removeAll(common)
+                        def common = replaceSet.intersect(properties.keySet()) //All properties that have been defined
+                        def tmp = replaceSet.clone()
+                        tmp.removeAll(common)
 
-                        diff.each {missing -> log.warn("Missing from properties file " + missing)}
+                        tmp.each {missing -> log.warn("Missing from properties file " + missing)}
                     }
                 }
 
