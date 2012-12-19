@@ -1,5 +1,7 @@
 package com.naughtyzombie.calypso.maven.mojo
+
 import org.codehaus.gmaven.mojo.GroovyMojo
+import org.apache.tools.ant.types.selectors.TypeSelector
 
 /**
  * Created with IntelliJ IDEA.
@@ -53,50 +55,60 @@ class GeneratePropertiesMojo extends GroovyMojo {
 
     @Override
     void execute() {
-        def templateFile = new File(src + "/" + templateFolder,"calypsosystem.properties." + version)
 
-        def replaceSet=[] as Set
+        def templateDir = new File(src + "/" + templateFolder)
+        def versionPattern = ~/.*\.$version/
 
-        templateFile.eachLine {line ->
-            def pattern = /(@)([a-zA-Z].+)@/
-            if (line =~ pattern) {
-                def matcher = line =~ pattern
-                replaceSet.add(matcher[0][2])
-            }
-        }
+        templateDir.eachFile {templateFile ->
+            if (templateFile ==~ versionPattern) {
 
-        replaceSet = new TreeSet(replaceSet)
+                def replaceSet = [] as Set
 
-        log.info("Expected Tokens")
-        replaceSet.each {replacementToken -> log.info(replacementToken)}
-
-        log.info("Looking for source properties files")
-        new File(src).eachFile {propertiesFile ->
-            if (propertiesFile.isFile()) {
-                log.info("Found " + propertiesFile)
-                def env = propertiesFile.name.lastIndexOf('.').with {it != -1 ? propertiesFile.name[0..<it] : propertiesFile.name}
-                new AntBuilder().delete(file : out + "/calypsosystem.properties." + env)
-                new AntBuilder().copy(  file : templateFile,
-                                        tofile : out + "/calypsosystem.properties." + env)
-
-                def properties = new Properties()
-                propertiesFile.withInputStream {stream -> properties.load(stream)}
-
-                def replacementFile = new File(out, "calypsosystem.properties." + env)
-                String contents = replacementFile.getText()
-
-                properties.each {prop ->
-                    log.info(prop.key + " = " + prop.value)
-                    contents = contents.replaceAll("@" + prop.key + "@",prop.value.toString())
+                templateFile.eachLine {line ->
+                    def pattern = /(@)([a-zA-Z].+)@/
+                    if (line =~ pattern) {
+                        def matcher = line =~ pattern
+                        replaceSet.add(matcher[0][2])
+                    }
                 }
 
-                replacementFile.write(contents)
+                replaceSet = new TreeSet(replaceSet)
 
-                def common = replaceSet.intersect(properties.keySet())
-                def diff = replaceSet.plus(properties.keySet())
-                diff.removeAll(common)
+                log.info("Expected Tokens")
+                replaceSet.each {replacementToken -> log.info(replacementToken)}
 
-                diff.each {missing -> log.warn("Missing from properties file " + missing)}
+                log.info("Looking for source properties files")
+                new File(src).eachFile {propertiesFile ->
+                    if (propertiesFile.isFile()) {
+                        log.info("Found " + propertiesFile)
+                        def env = propertiesFile.name.lastIndexOf('.').with {it != -1 ? propertiesFile.name[0..<it] : propertiesFile.name}
+                        def filePrefix = templateFile.name.lastIndexOf('.').with {it != -1 ? templateFile.name[0..<it] : templateFile.name}
+                        def envFileName = filePrefix + "." + env
+                        new AntBuilder().delete(file: out + "/" + envFileName)
+                        new AntBuilder().copy(file: templateFile,
+                                tofile: out + "/" + envFileName)
+
+                        def properties = new Properties()
+                        propertiesFile.withInputStream {stream -> properties.load(stream)}
+
+                        def replacementFile = new File(out, envFileName)
+                        String contents = replacementFile.getText()
+
+                        properties.each {prop ->
+                            log.info(prop.key + " = " + prop.value)
+                            contents = contents.replaceAll("@" + prop.key + "@", prop.value.toString())
+                        }
+
+                        replacementFile.write(contents)
+
+                        def common = replaceSet.intersect(properties.keySet())
+                        def diff = replaceSet.plus(properties.keySet())
+                        diff.removeAll(common)
+
+                        diff.each {missing -> log.warn("Missing from properties file " + missing)}
+                    }
+                }
+
             }
         }
     }
