@@ -23,5 +23,24 @@
 
     <build>
         <sourceDirectory>src/main/config</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>com.naughtyzombie.calypso.maven</groupId>
+                <artifactId>calypso-maven-plugin</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>generate-properties</goal>
+                        </goals>
+                        <configuration>
+                            <version>120000SP6</version>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
+
 </project>

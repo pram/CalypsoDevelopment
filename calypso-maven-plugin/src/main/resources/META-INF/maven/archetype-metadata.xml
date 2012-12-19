@@ -10,19 +10,13 @@
         <module id="config" dir="config" name="config">
             <fileSets>
                 <fileSet filtered="true" packaged="false">
-                    <directory>src/main/config/dev</directory>
+                    <directory>src/main/config</directory>
                     <includes>
                         <include>**/*.*</include>
                     </includes>
                 </fileSet>
                 <fileSet filtered="true" packaged="false">
-                    <directory>src/main/config/qa</directory>
-                    <includes>
-                        <include>**/*.*</include>
-                    </includes>
-                </fileSet>
-                <fileSet filtered="true" packaged="false">
-                    <directory>src/main/config/prod</directory>
+                    <directory>src/main/config/templates</directory>
                     <includes>
                         <include>**/*.*</include>
                     </includes>
