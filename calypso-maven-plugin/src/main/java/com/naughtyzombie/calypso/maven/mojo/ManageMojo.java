@@ -55,10 +55,19 @@ public class ManageMojo extends AbstractMojo {
      */
     private MavenProject project;
 
+    /**
+     * The process catalogs to use to build a list and let the user choose from.
+     * Should be defined at compile time by the calling project
+     *
+     * @parameter property="managementModule" default-value="false"
+     */
+    private boolean managementModule;
+
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
 
-        if (this.project.getParent() == null) {
+        if (managementModule) {
 
             CalypsoProcessRequest cpRequest = new CalypsoProcessRequest();
 

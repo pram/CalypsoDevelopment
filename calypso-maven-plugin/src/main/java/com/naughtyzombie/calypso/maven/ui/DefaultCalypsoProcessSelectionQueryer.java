@@ -111,7 +111,7 @@ public class DefaultCalypsoProcessSelectionQueryer extends AbstractLogEnabled im
                 answer = prompter.prompt(query.toString(), Integer.toString(defaultSelection));
             }
 
-            System.out.println("!!!!!!" + answer);
+            getLogger().debug("Chosen Answer " + answer);
 
             if (NumberUtils.isNumber(answer)) {
                 selection = processAnswerMap.get(answer);
