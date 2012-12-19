@@ -1,7 +1,6 @@
 package com.naughtyzombie.calypso.maven.mojo
 
 import org.codehaus.gmaven.mojo.GroovyMojo
-import org.apache.tools.ant.types.selectors.TypeSelector
 
 /**
  * Created with IntelliJ IDEA.
