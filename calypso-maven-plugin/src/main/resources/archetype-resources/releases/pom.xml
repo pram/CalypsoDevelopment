@@ -19,6 +19,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <calypso.unpacked.release>${project.build.directory}/unpacked/${calypso.version}</calypso.unpacked.release>
     </properties>
 
     <build>

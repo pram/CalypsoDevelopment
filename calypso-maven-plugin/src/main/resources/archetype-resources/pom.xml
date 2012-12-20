@@ -13,6 +13,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <calypso.version>${calypsoVersion}</calypso.version>
+        <calypso.group>${calypsoGroup}</calypso.group>
     </properties>
 
     <dependencies>

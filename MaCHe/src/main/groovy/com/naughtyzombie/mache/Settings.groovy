@@ -6,15 +6,20 @@ package com.naughtyzombie.mache
  * Date: 2012/07/24
  * Time: 10:24 AM
  */
-class Settings {
+public class Settings {
     private String label
     private String repository
     private String group
     private boolean execute
     private boolean clean
     private boolean generatePom
+    private boolean deploy
     private String jarFile
     private String mvnLocation
+    private String tmpDir
+
+    Settings() {
+    }
 
     def setLabel(String label) {
         this.label = label
@@ -22,6 +27,14 @@ class Settings {
 
     String getLabel() {
         return this.label
+    }
+
+    def setTmpDir(String tmpDir) {
+        this.tmpDir = tmpDir
+    }
+
+    String getTmpDir() {
+        return this.tmpDir
     }
 
     def setRepository(String repository) {
@@ -56,6 +69,14 @@ class Settings {
         return this.execute
     }
 
+    boolean isDeploy() {
+        return this.deploy
+    }
+
+    def setDeploy(boolean deploy) {
+        this.deploy = deploy
+    }
+
     def setClean(boolean clean) {
         this.clean = clean
     }
@@ -73,7 +94,15 @@ class Settings {
     }
 
     boolean isGenerate() {
-        return (this.label && this.repository && this.group)
+
+        def retVal = false;
+
+        if (this.deploy) {
+            retVal = (this.label && this.repository && this.group)
+        } else {
+            retVal = (this.label && this.group)
+        }
+        return retVal
     }
 
     def setMavenLocation(String mvnLocation) {

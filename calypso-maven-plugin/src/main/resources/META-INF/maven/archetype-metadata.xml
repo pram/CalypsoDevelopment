@@ -5,6 +5,9 @@
             <defaultValue>1.0-SNAPSHOT</defaultValue>
         </requiredProperty>
         <requiredProperty key="calypsoVersion"/>
+        <requiredProperty key="calypsoGroup">
+            <defaultValue>com.calypso</defaultValue>
+        </requiredProperty>
     </requiredProperties>
     <modules>
         <module id="config" dir="config" name="config">

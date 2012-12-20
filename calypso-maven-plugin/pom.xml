@@ -60,6 +60,11 @@
             <artifactId>gmaven-mojo</artifactId>
             <version>1.5</version>
         </dependency>
+        <dependency>
+            <groupId>com.naughtyzombie.mache</groupId>
+            <artifactId>mache</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

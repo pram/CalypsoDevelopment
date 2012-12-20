@@ -8,8 +8,9 @@ import groovy.xml.MarkupBuilder
  * Date: 2012/07/23
  * Time: 11:11 AM
  */
-class Worker {
-    final String GEN_SCRIPT = 'mvndeploy.script'
+public class Worker {
+    final String GEN_DEPLOY_SCRIPT = 'mvndeploy.script'
+    final String GEN_INSTALL_SCRIPT = 'mvninstall.script'
     final String POM_FRAGMENT = 'pom.fragment'
 
     private Settings settings;
@@ -21,7 +22,7 @@ class Worker {
     }
 
     static File createWorkingDir(Settings settings) {
-        final file = new File(".MaCHe.temp")
+        final file = new File(settings.getTmpDir())
         if (settings.isGenerate()) {
             if (file.exists() && file.isDirectory()) {
                 file.deleteDir()
@@ -41,16 +42,28 @@ class Worker {
         }
     }
 
+    def copyJars(releaseDir) {
+        if (this.settings.isGenerate()) {
+            final builder = new AntBuilder()
+
+            builder.copy(toDir: this.workingDir, flatten: true) {
+                fileset(dir: releaseDir) {
+                    include(name:"**/*.jar")
+                }
+            }
+        }
+    }
+
     def cleanUp() {
         if (this.settings.isClean()) {
             new AntBuilder().delete(dir: this.workingDir)
         }
     }
 
-    def generateScript() {
+    def generateDeployScript() {
 
         if (settings.isGenerate()) {
-            final script = new File(this.workingDir, GEN_SCRIPT)
+            final script = new File(this.workingDir, GEN_DEPLOY_SCRIPT)
             final scriptName = "mvn"
             if (System.properties['os.name'].toLowerCase().contains('windows')) {
                 scriptName = scriptName +".bat"
@@ -58,7 +71,7 @@ class Worker {
             File mvn = new File(this.settings.getMavenLocation() + "/bin", scriptName)
             final mvnPath = mvn.getAbsolutePath()
             this.workingDir.eachFile() {
-                if (it.isFile()) {
+                if (it.isFile() && it.name.endsWith(".jar")) {
                     script.append(mvnPath)
                     script.append(' deploy:deploy-file ')
                     script.append("-DgroupId=${this.settings.getGroup()} ")
@@ -73,13 +86,40 @@ class Worker {
         }
     }
 
+    def generateInstallScript() {
+
+        if (settings.isGenerate()) {
+            final script = new File(this.workingDir, GEN_INSTALL_SCRIPT)
+            final scriptName = "mvn"
+            if (System.properties['os.name'].toLowerCase().contains('windows')) {
+                scriptName = scriptName +".bat"
+            }
+            File mvn = new File(this.settings.getMavenLocation() + "/bin", scriptName)
+            final mvnPath = mvn.getAbsolutePath()
+            this.workingDir.eachFile() {
+                if (it.isFile() && it.name.endsWith(".jar")) {
+                    script.append(mvnPath)
+                    script.append(' install:install-file ')
+                    script.append("-DgroupId=${this.settings.getGroup()} ")
+                    script.append("-DartifactId=${it.getName().split('.jar')[0]} ")
+                    script.append("-Dversion=${this.settings.getLabel()} ")
+                    script.append('-Dpackaging=jar ')
+                    script.append("-Dfile=${it.absolutePath} ")
+                    script.append("-DgeneratePom=true")
+                    script.append('\n')
+                }
+            }
+        }
+    }
+
+
     def execute() {
         if (!settings.getMavenLocation()) {
             println("Maven is not installed")
             return
         }
         if (settings.isExecute()) {
-            final script = new File(this.workingDir, GEN_SCRIPT)
+            final script = new File(this.workingDir, GEN_DEPLOY_SCRIPT)
             if (script.exists() && script.isFile()) {
                 println "Executing " + script.getName()
 
@@ -116,7 +156,7 @@ class Worker {
 
     def generatePomFragment() {
         if (settings.isGeneratePom()) {
-            final script = new File(this.workingDir, GEN_SCRIPT)
+            final script = new File(this.workingDir, GEN_DEPLOY_SCRIPT)
             if (script.exists() && script.isFile()) {
                 final pomFrag = new File(this.workingDir, POM_FRAGMENT)
                 pomFrag.write(' ') //clear contents of file
