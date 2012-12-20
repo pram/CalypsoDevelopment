@@ -20,7 +20,21 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <calypso.unpacked.release>${project.build.directory}/unpacked/${calypso.version}</calypso.unpacked.release>
+	<mache.version>1.0-SNAPSHOT</mache.version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.naughtyzombie.mache</groupId>
+            <artifactId>mache</artifactId>
+            <version>${mache.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.newinstall.calypso</groupId>
+            <artifactId>config</artifactId>
+            <version>${version}</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -43,6 +57,45 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.naughtyzombie.calypso.maven</groupId>
+                <artifactId>calypso-maven-plugin</artifactId>
+                <version>${version}</version>
+                <configuration>
+                    <managementModule>true</managementModule>
+                    <processCatalog>FULL</processCatalog>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.naughtyzombie.mache</groupId>
+                        <artifactId>mache</artifactId>
+                        <version>${mache.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <configuration>
+                    <executable>java</executable>
+                    <arguments>
+                        <argument>-Xms512m</argument>
+                        <argument>-Xmx512m</argument>
+                        <argument>-XX:NewRatio=3</argument>
+                        <argument>-XX:+PrintGCTimeStamps</argument>
+                        <argument>-XX:+PrintGCDetails</argument>
+                        <argument>-Xloggc:gc.log</argument>
+                        <argument>-classpath</argument>
+                        <classpath/>
+                        <argument>com.calypso.apps.startup.StartAppWindow</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.6</version>
             </plugin>
         </plugins>
     </build>

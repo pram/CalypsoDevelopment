@@ -41,6 +41,16 @@
                 </executions>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>${project.build.directory}/generated-sources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>calypsosystem.properties.*</include>
+                    <include>calypsouser.properties.*</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 
 </project>
