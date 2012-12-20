@@ -11,7 +11,7 @@ Once this step is complete you can run
 
     mvn install
 
-to install the plugin into your local .m2 repository. To make the release available to other developers consult the documentation associated with your repository.  
+to install the plugin into your local .m2 repository. To make the release available to other developers consult the remote deployment documentation associated with your repository.
 
 ##Archetype Creation##
 To create a new Calypso project run the following command
