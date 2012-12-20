@@ -5,7 +5,7 @@ This is a general purpose Maven plugin to help with the development of any Calyp
 
 ##Installation##
 
-After checking out the project you will need to resolve a couple of dependency issues. `com.sun::tools` and `com.brsanthu::data-exporter` are not registered with Maven Central and must be installed locally (or within your repository) to continue.  You must also install MaCHe into your local/remote repository in order to use the release module.
+After checking out the project you will need to resolve a couple of dependency issues. `com.sun::tools` and `com.brsanthu::data-exporter` are not registered with Maven Central and must be installed locally (or within your repository) to continue.  You must also install MaCHe (https://github.com/pram/CalypsoDevelopment/tree/master/MaCHe) into your local/remote repository in order to use the release module.
 
 Once this step is complete you can run
 
