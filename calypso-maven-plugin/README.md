@@ -1,7 +1,7 @@
-calypso-maven-plugin - Maven and Calypso
+calypso-maven-plugin - Calypso development with Maven
 ==================================================================================
 
-This is a general purpose Maven plugin to help with the development of any Calypso (http://www.calypso.com) related development.
+This is a general purpose Maven plugin to help with the development of any Calypso (http://www.calypso.com) related project.
 
 ##Installation##
 
