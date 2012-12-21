@@ -156,3 +156,94 @@ You should see output of the following form
     | Inactive |             com.calypso.apps.datamigration.MigratorCMGUI             |              -               |                              |
     +==========+======================================================================+==============================+==============================+
 
+To see the processes in the other process catalog included in the release either modify the `processCatalog` in the parent pom (currently set to `<processCatalog>FULL</processCatalog>`) or run `mvn calypso:status` setting the `processCatalog` variable to the name of the alternative catalog. For example to see the catalog of the other bundled catalog (named ALL) you would run the following command
+
+    mvn calypso:status -DprocessCatalog=ALL
+
+The output of which looks like
+
+    +==========+======================================================================+==============================+==============================+
+    |   PID    |                              Class Name                              |   ENV (expected[/running])   |            Config            |
+    +==========+======================================================================+==============================+==============================+
+    | Inactive |              com.calypso.apps.startup.StartAuthService               |              -               |                              |
+    | Inactive |               com.calypso.apps.startup.StartDataServer               |              -               |                              |
+    | Inactive |              com.calypso.apps.startup.StartEventServer               |              -               |                              |
+    | Inactive |           com.calypso.apps.startup.StartCalculationServer            |              -               |           CS_AdHoc           |
+    | Inactive |           com.calypso.apps.startup.StartCalculationServer            |              -               |         CS_Official          |
+    | Inactive |           com.calypso.apps.startup.StartPresentationServer           |              -               |           PS_AdHoc           |
+    | Inactive |           com.calypso.apps.startup.StartPresentationServer           |              -               |         PS_Official          |
+    +==========+======================================================================+==============================+==============================+
+
+You can define your own catalogs in the `config` module. They must be named `calypso-catalog-env.xml` or `calypso-catalog-xxx.xml` where xxx corresponds to the calypso.env.name property ie
+
+    mvn calypso:status -Dcalypso.env.name=DEV1
+
+##Displaying the Calypso Dependency Tree##
+
+In order to see the dependency graph defined in the process catalog you can run the `tree` goal. So running
+
+    mvn calypso:tree
+
+Will show
+
+    -- EventServer'{ className='com.calypso.apps.startup.StartEventServer'}
+       `-- AuthService'{ className='com.calypso.apps.startup.StartAuthService'}
+          `-- DataServer'{ className='com.calypso.apps.startup.StartDataServer'}
+             |-- AccountingEngine'{ className='com.calypso.apps.startup.StartAccountingEngine'}
+             |-- BalanceEngine'{ className='com.calypso.apps.startup.StartBalanceEngine'}
+             |-- ImportMessageEngine'{ className='com.calypso.apps.startup.StartImportMessageEngine'}
+             |-- IncomingMessageEngine'{ className='com.calypso.apps.startup.StartIncomingMessageEngine'}
+             |-- InventoryEngine'{ className='com.calypso.apps.startup.StartInventoryEngine'}
+             |-- LimitEngine'{ className='com.calypso.apps.startup.StartLimitEngine'}
+             |-- LiquidationEngine'{ className='com.calypso.apps.startup.StartLiquidationEngine'}
+             |-- MatchableBuilderEngine'{ className='com.calypso.apps.startup.StartMatchableBuilderEngine'}
+             |-- MatchingEngine'{ className='com.calypso.apps.startup.StartMatchingEngine'}
+             |-- MessageEngine'{ className='com.calypso.apps.startup.StartMessageEngine'}
+             |-- SenderEngine'{ className='com.calypso.apps.startup.StartSenderEngine'}
+             |-- TransferEngine'{ className='com.calypso.apps.startup.StartTransferEngine'}
+             |-- TaskEngine'{ className='com.calypso.apps.startup.StartTaskEngine'}
+             |-- SchedulingEngine'{ className='com.calypso.apps.startup.StartSchedulingEngine'}
+             |-- MutationEngine'{ className='com.calypso.apps.startup.StartMutationEngine'}
+             |-- BillingEngine'{ className='com.calypso.apps.startup.StartBillingEngine'}
+             |-- DiaryEngine'{ className='com.calypso.apps.startup.StartDiaryEngine'}
+             |-- MainEntry'{ className='com.calypso.apps.startup.StartMainEntry'}
+             |-- Admin'{ className='com.calypso.apps.startup.StartAdmin'}
+             |-- UserEnv'{ className='com.calypso.apps.startup.StartUserEnv'}
+             |-- CalculationServer'{ className='com.calypso.apps.startup.StartCalculationServer'}
+             |-- PresentationServer'{ className='com.calypso.apps.startup.StartPresentationServer'}
+             |-- MktDataServer'{ className='com.calypso.apps.startup.StartMktDataServer'}
+             |-- Dispatcher'{ className='com.calypso.apps.startup.StartDispatcher'}
+             |-- Calculator'{ className='com.calypso.apps.startup.StartCalculator'}
+             |-- ExecuteSQL'{ className='com.calypso.apps.startup.StartExecuteSQL'}
+             |-- MiddleTierExecuteSQL'{ className='com.calypso.apps.startup.StartExecuteSQL'}
+             |-- ExportData'{ className='com.calypso.apps.startup.StartExportData'}
+             |-- DBBrowser'{ className='com.calypso.apps.startup.StartDBBrowser'}
+             |-- AutoTest'{ className='com.calypso.apps.startup.StartAutoTest'}
+             |-- BenchMarkTools'{ className='com.calypso.apps.startup.StartBenchMarkTools'}
+             |-- AccessPerm'{ className='com.calypso.apps.startup.StartAccessPerm'}
+             |-- SystemEnv'{ className='com.calypso.apps.startup.StartSystemEnv'}
+             |-- LocalWebServer'{ className='com.calypso.web.server.LocalWebServer'}
+             |-- QuoteServer'{ className='com.calypso.apps.startup.StartQuoteServer'}
+             |-- CustomerQuoteServer'{ className='com.calypso.apps.startup.StartCustomerQuoteServer'}
+             |-- FXManualQuoteServer'{ className='com.calypso.apps.startup.StartFXManualQuoteServer'}
+             |-- MarginCallEngine'{ className='com.calypso.apps.startup.StartMarginCallEngine'}
+             |-- PositionEngine'{ className='com.calypso.apps.startup.StartPositionEngine'}
+             |-- CreEngine'{ className='com.calypso.apps.startup.StartCreEngine'}
+             |-- CreSenderEngine'{ className='com.calypso.apps.startup.StartCreSenderEngine'}
+             |-- ISDAServer'{ className='com.calypso.apps.startup.StartISDAServer'}
+             |-- CAM'{ className='com.calypso.apps.datamigration.MigratorGUI'}
+             `-- ConfigurationManagement'{ className='com.calypso.apps.datamigration.MigratorCMGUI'}
+
+Alternatively running for the other bundled catalog
+
+    mvn calypso:tree -DprocessCatalog=ALL
+
+Will show
+
+    -- EventServer'{ className='com.calypso.apps.startup.StartEventServer'}
+       `-- AuthService'{ className='com.calypso.apps.startup.StartAuthService'}
+          `-- DataServer'{ className='com.calypso.apps.startup.StartDataServer'}
+             |-- CalculationServer'{ className='com.calypso.apps.startup.StartCalculationServer', id='CS_AdHoc'}
+             |   `-- PresentationServer'{ className='com.calypso.apps.startup.StartPresentationServer', id='PS_AdHoc'}
+             `-- CalculationServer'{ className='com.calypso.apps.startup.StartCalculationServer', id='CS_Official'}
+                `-- PresentationServer'{ className='com.calypso.apps.startup.StartPresentationServer', id='PS_Official'}

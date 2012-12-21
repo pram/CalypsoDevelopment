@@ -12,276 +12,322 @@
             <classname>com.calypso.apps.startup.StartAuthService</classname>
             <description></description>
             <alias>AUTH</alias>
+            <dependencies>EventServer</dependencies>
         </process>
         <process>
             <name>DataServer</name>
             <classname>com.calypso.apps.startup.StartDataServer</classname>
             <description></description>
             <alias>DS</alias>
+            <dependencies>AuthService</dependencies>
         </process>
         <process>
             <name>AccountingEngine</name>
             <classname>com.calypso.apps.startup.StartAccountingEngine</classname>
             <description></description>
             <alias>ACC</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>BalanceEngine</name>
             <classname>com.calypso.apps.startup.StartBalanceEngine</classname>
             <description></description>
             <alias>BAL</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>ImportMessageEngine</name>
             <classname>com.calypso.apps.startup.StartImportMessageEngine</classname>
             <description></description>
             <alias>MES</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>IncomingMessageEngine</name>
             <classname>com.calypso.apps.startup.StartIncomingMessageEngine</classname>
             <description></description>
             <alias>IMES</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>InventoryEngine</name>
             <classname>com.calypso.apps.startup.StartInventoryEngine</classname>
             <description></description>
             <alias>INV</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>LimitEngine</name>
             <classname>com.calypso.apps.startup.StartLimitEngine</classname>
             <description></description>
             <alias>LIM</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>LiquidationEngine</name>
             <classname>com.calypso.apps.startup.StartLiquidationEngine</classname>
             <description></description>
             <alias>LIQ</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>MatchableBuilderEngine</name>
             <classname>com.calypso.apps.startup.StartMatchableBuilderEngine</classname>
             <description></description>
             <alias>MBUIL</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>MatchingEngine</name>
             <classname>com.calypso.apps.startup.StartMatchingEngine</classname>
             <description></description>
             <alias>MAT</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>MessageEngine</name>
             <classname>com.calypso.apps.startup.StartMessageEngine</classname>
             <description></description>
             <alias>MES</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>SenderEngine</name>
             <classname>com.calypso.apps.startup.StartSenderEngine</classname>
             <description></description>
             <alias>SEN</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>TransferEngine</name>
             <classname>com.calypso.apps.startup.StartTransferEngine</classname>
             <description></description>
             <alias>TRA</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>TaskEngine</name>
             <classname>com.calypso.apps.startup.StartTaskEngine</classname>
             <description></description>
             <alias>TAS</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>SchedulingEngine</name>
             <classname>com.calypso.apps.startup.StartSchedulingEngine</classname>
             <description></description>
             <alias>SCH</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>MutationEngine</name>
             <classname>com.calypso.apps.startup.StartMutationEngine</classname>
             <description></description>
             <alias>MUT</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>BillingEngine</name>
             <classname>com.calypso.apps.startup.StartBillingEngine</classname>
             <description></description>
             <alias>BIL</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>DiaryEngine</name>
             <classname>com.calypso.apps.startup.StartDiaryEngine</classname>
             <description></description>
             <alias>DIA</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>MainEntry</name>
             <classname>com.calypso.apps.startup.StartMainEntry</classname>
             <description></description>
             <alias>MAIN</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>Admin</name>
             <classname>com.calypso.apps.startup.StartAdmin</classname>
             <description></description>
             <alias>ADM</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>UserEnv</name>
             <classname>com.calypso.apps.startup.StartUserEnv</classname>
             <description></description>
             <alias>USR</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>CalculationServer</name>
             <classname>com.calypso.apps.startup.StartCalculationServer</classname>
             <description></description>
             <alias>CS</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>PresentationServer</name>
             <classname>com.calypso.apps.startup.StartPresentationServer</classname>
             <description></description>
             <alias>PS</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>MktDataServer</name>
             <classname>com.calypso.apps.startup.StartMktDataServer</classname>
             <description></description>
             <alias>MKT</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>Dispatcher</name>
             <classname>com.calypso.apps.startup.StartDispatcher</classname>
             <description></description>
             <alias>DIS</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>Calculator</name>
             <classname>com.calypso.apps.startup.StartCalculator</classname>
             <description></description>
             <alias>CAL</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>ExecuteSQL</name>
             <classname>com.calypso.apps.startup.StartExecuteSQL</classname>
             <description></description>
             <alias>ESQL</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>MiddleTierExecuteSQL</name>
             <classname>com.calypso.apps.startup.StartExecuteSQL</classname>
             <description></description>
             <alias>ESQL</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>ExportData</name>
             <classname>com.calypso.apps.startup.StartExportData</classname>
             <description></description>
             <alias>EXP</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>DBBrowser</name>
             <classname>com.calypso.apps.startup.StartDBBrowser</classname>
             <description></description>
             <alias>DB</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>AutoTest</name>
             <classname>com.calypso.apps.startup.StartAutoTest</classname>
             <description></description>
             <alias>AUT</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>BenchMarkTools</name>
             <classname>com.calypso.apps.startup.StartBenchMarkTools</classname>
             <description></description>
             <alias>BEN</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>AccessPerm</name>
             <classname>com.calypso.apps.startup.StartAccessPerm</classname>
             <description></description>
             <alias>PERM</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>SystemEnv</name>
             <classname>com.calypso.apps.startup.StartSystemEnv</classname>
             <description></description>
             <alias>ENV</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>LocalWebServer</name>
             <classname>com.calypso.web.server.LocalWebServer</classname>
             <description></description>
             <alias>WEB</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>QuoteServer</name>
             <classname>com.calypso.apps.startup.StartQuoteServer</classname>
             <description></description>
             <alias>QUOT</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>CustomerQuoteServer</name>
             <classname>com.calypso.apps.startup.StartCustomerQuoteServer</classname>
             <description></description>
             <alias>CQ</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>FXManualQuoteServer</name>
             <classname>com.calypso.apps.startup.StartFXManualQuoteServer</classname>
             <description></description>
             <alias>FXQ</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>MarginCallEngine</name>
             <classname>com.calypso.apps.startup.StartMarginCallEngine</classname>
             <description></description>
             <alias>MAR</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>PositionEngine</name>
             <classname>com.calypso.apps.startup.StartPositionEngine</classname>
             <description></description>
             <alias>POS</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>CreEngine</name>
             <classname>com.calypso.apps.startup.StartCreEngine</classname>
             <description></description>
             <alias>CRE</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>CreSenderEngine</name>
             <classname>com.calypso.apps.startup.StartCreSenderEngine</classname>
             <description></description>
             <alias>CRES</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>ISDAServer</name>
             <classname>com.calypso.apps.startup.StartISDAServer</classname>
             <description></description>
             <alias>ISDA</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>CAM</name>
             <classname>com.calypso.apps.datamigration.MigratorGUI</classname>
             <description></description>
             <alias>MIG</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>ConfigurationManagement</name>
             <classname>com.calypso.apps.datamigration.MigratorCMGUI</classname>
             <description></description>
             <alias>MIGC</alias>
+            <dependencies>DataServer</dependencies>
         </process>
     </processes>
 </calypso-process-catalog>

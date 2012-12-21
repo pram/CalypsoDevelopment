@@ -5,12 +5,14 @@
             <classname>com.calypso.apps.startup.StartAuthService</classname>
             <description>Start the Auth Service</description>
             <alias>AUTH</alias>
+            <dependencies>EventServer</dependencies>
         </process>
         <process>
             <name>DataServer</name>
             <classname>com.calypso.apps.startup.StartDataServer</classname>
             <description>Start the DataServer</description>
             <alias>DS</alias>
+            <dependencies>AuthService</dependencies>
         </process>
         <process>
             <name>EventServer</name>
@@ -21,15 +23,33 @@
             <name>CalculationServer</name>
             <classname>com.calypso.apps.startup.StartCalculationServer</classname>
             <description>ADHOC Calc Server</description>
-            <id>CS_AddHoc1</id>
+            <id>CS_AdHoc</id>
             <alias>CS</alias>
+            <dependencies>DataServer</dependencies>
         </process>
         <process>
             <name>CalculationServer</name>
             <classname>com.calypso.apps.startup.StartCalculationServer</classname>
             <description>Official Sensitivity Calc Server</description>
-            <id>CS_AddHoc2</id>
+            <id>CS_Official</id>
             <alias>CS</alias>
+            <dependencies>DataServer</dependencies>
+        </process>
+        <process>
+            <name>PresentationServer</name>
+            <classname>com.calypso.apps.startup.StartPresentationServer</classname>
+            <description>ADHOC Pres Server</description>
+            <id>PS_AdHoc</id>
+            <alias>PS</alias>
+            <dependencies>CalculationServer::CS_AdHoc</dependencies>
+        </process>
+        <process>
+            <name>PresentationServer</name>
+            <classname>com.calypso.apps.startup.StartPresentationServer</classname>
+            <description>Official Pres Server</description>
+            <id>PS_Official</id>
+            <alias>PS</alias>
+            <dependencies>CalculationServer::CS_Official</dependencies>
         </process>
     </processes>
 </calypso-process-catalog>

@@ -2,6 +2,9 @@ package com.naughtyzombie.calypso.maven.process;
 
 import org.apache.commons.cli.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: c935533
@@ -19,6 +22,9 @@ public class CalypsoProcess implements java.io.Serializable {
     private int pid;
     private String jvmArgs;
     private String jvmFlags;
+    private List<String> dependencies;
+    private CalypsoProcess parent;
+    private List<CalypsoProcess> children;
 
     public String getName() {
         return name;
@@ -58,10 +64,16 @@ public class CalypsoProcess implements java.io.Serializable {
 
     @Override
     public String toString() {
-        return "CalypsoProcess{" +
-                "name='" + name + '\'' +
-                ", className='" + className + '\'' +
-                '}';
+        String retVal = name + '\'' +
+                "{ className='" + className + '\'';
+        if (this.id != null) {
+         retVal = retVal + ", id='" + id + '\'';
+        }
+
+        retVal = retVal + "}";
+
+        return retVal;
+
     }
 
     public String getDescription() {
@@ -163,5 +175,45 @@ public class CalypsoProcess implements java.io.Serializable {
         Option option = new Option(argName,hasArg," ");
         option.setRequired(false);
         return option;
+    }
+
+    public List<String> getDependencies() {
+        return dependencies;
+    }
+
+    public void setDependencies(List<String> dependencies) {
+        this.dependencies = dependencies;
+    }
+
+    public void addDependency(String dependency) {
+        if (this.dependencies==null) {
+            this.dependencies = new ArrayList<String>();
+        }
+
+        this.dependencies.add(dependency);
+    }
+
+    public CalypsoProcess getParent() {
+        return parent;
+    }
+
+    public void setParent(CalypsoProcess parent) {
+        this.parent = parent;
+    }
+
+    public List<CalypsoProcess> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<CalypsoProcess> children) {
+        this.children = children;
+    }
+
+    public void addChild(CalypsoProcess child) {
+        if (this.children==null) {
+            this.children = new ArrayList<CalypsoProcess>();
+        }
+
+        this.children.add(child);
     }
 }

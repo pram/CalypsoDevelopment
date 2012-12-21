@@ -8,6 +8,8 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -145,6 +147,10 @@ public class CalypsoProcessCatalogXpp3Reader {
                 process.setEnv(getTrimmedValue(parser.nextText()));
             } else if (checkFieldWithDuplicate(parser, "commandline",null,parsed)){
                 process.setCommandLine(getTrimmedValue(parser.nextText()));
+            } else if (checkFieldWithDuplicate(parser, "dependencies",null,parsed)){
+                String depList = getTrimmedValue(parser.nextText());
+                List<String> dependencies = Arrays.asList(depList.split(","));
+                process.setDependencies(dependencies);
             } else {
 				checkUnknownElement(parser, strict);
 			}
