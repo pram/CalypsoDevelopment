@@ -50,6 +50,10 @@
                     <include>calypsouser.properties.*</include>
                 </includes>
             </resource>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
         </resources>
     </build>
 

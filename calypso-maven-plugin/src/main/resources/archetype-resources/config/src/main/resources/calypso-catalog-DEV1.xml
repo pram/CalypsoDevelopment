@@ -1,0 +1,69 @@
+<calypso-process-catalog>
+    <processes>
+        <process>
+            <name>AuthService</name>
+            <classname>com.calypso.apps.startup.StartAuthService</classname>
+            <description>Start the Auth Service</description>
+            <alias>AUTH</alias>
+            <dependencies>EventServer</dependencies>
+        </process>
+        <process>
+            <name>DataServer</name>
+            <classname>com.calypso.apps.startup.StartDataServer</classname>
+            <description>Start the DataServer</description>
+            <alias>DS</alias>
+            <dependencies>AuthService</dependencies>
+        </process>
+        <process>
+            <name>EventServer</name>
+            <classname>com.calypso.apps.startup.StartEventServer</classname>
+            <alias>ES</alias>
+        </process>
+        <process>
+            <name>CalculationServer</name>
+            <classname>com.calypso.apps.startup.StartCalculationServer</classname>
+            <description>ADHOC DEV1 Calc Server</description>
+            <id>CS_AdHoc</id>
+            <alias>CS</alias>
+            <dependencies>DataServer</dependencies>
+        </process>
+        <process>
+            <name>CalculationServer</name>
+            <classname>com.calypso.apps.startup.StartCalculationServer</classname>
+            <description>Official DEV1 Sensitivity Calc Server</description>
+            <id>CS_Official</id>
+            <alias>CS</alias>
+            <dependencies>DataServer</dependencies>
+        </process>
+        <process>
+            <name>PresentationServer</name>
+            <classname>com.calypso.apps.startup.StartPresentationServer</classname>
+            <description>ADHOC DEV1 Pres Server</description>
+            <id>PS_AdHoc</id>
+            <alias>PS</alias>
+            <dependencies>CalculationServer::CS_AdHoc</dependencies>
+        </process>
+        <process>
+            <name>PresentationServer</name>
+            <classname>com.calypso.apps.startup.StartPresentationServer</classname>
+            <description>Official DEV1 Pres Server</description>
+            <id>PS_Official</id>
+            <alias>PS</alias>
+            <dependencies>CalculationServer::CS_Official</dependencies>
+        </process>
+        <process>
+            <name>TransferEngine</name>
+            <classname>com.calypso.apps.startup.StartTransferEngine</classname>
+            <description></description>
+            <alias>TRA</alias>
+            <dependencies>DataServer</dependencies>
+        </process>
+        <process>
+            <name>TaskEngine</name>
+            <classname>com.calypso.apps.startup.StartTaskEngine</classname>
+            <description></description>
+            <alias>TAS</alias>
+            <dependencies>DataServer</dependencies>
+        </process>
+    </processes>
+</calypso-process-catalog>
