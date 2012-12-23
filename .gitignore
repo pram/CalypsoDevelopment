@@ -35,9 +35,11 @@ local.properties
 .idea
 MaCHe/*.iml
 MaCHe/target/
+MaCHe/.idea/
 calypso-maven-plugin/calypso.iml
 out
 calypso-maven-plugin/calypso-maven-plugin.iml
+calypso-maven-plugin/.idea/
 calypso-maven-plugin/target/
 
 
