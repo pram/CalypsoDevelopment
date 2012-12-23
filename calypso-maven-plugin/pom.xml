@@ -39,7 +39,7 @@
             <artifactId>tools</artifactId>
             <version>1.6</version>
             <scope>system</scope>
-            <systemPath>C:\java\jdk1.6.0_35\lib\tools.jar</systemPath>
+            <systemPath>${toolsjar}</systemPath>
             <optional>true</optional>
             <!-- mvn install:install-file -DgroupId=com.sun -DartifactId=tools -Dversion=1.6 -Dpackaging=jar -Dfile=C:\java\jdk1.6.0_35\lib\tools.jar-->
         </dependency>
@@ -53,7 +53,8 @@
             <artifactId>data-exporter</artifactId>
             <version>1.0.0</version>
             <!-- http://code.google.com/p/data-exporter/wiki/UserGuide -->
-            <!-- mvn install:install-file -DgroupId=com.brsanthu -DartifactId=data-exporter -Dversion=1.0.0 -Dpackaging=jar -Dfile=http://data-exporter.googlecode.com/files/data-exporter-1.0.0.jar-->
+            <!-- curl -O http://data-exporter.googlecode.com/files/data-exporter-1.0.0.jar -->
+            <!-- mvn install:install-file -DgroupId=com.brsanthu -DartifactId=data-exporter -Dversion=1.0.0 -Dpackaging=jar -Dfile=data-exporter-1.0.0.jar-->
         </dependency>
         <dependency>
             <groupId>org.codehaus.gmaven</groupId>
@@ -69,6 +70,8 @@
             <groupId>dnl.utils</groupId>
             <artifactId>j-text-utils</artifactId>
             <version>0.3</version>
+            <!-- curl -O http://j-text-utils.googlecode.com/files/j-text-utils-0.3.jar -->
+            <!-- mvn install:install-file -DgroupId=dnl.utils -DartifactId=j-text-utils -Dversion=0.3 -Dpackaging=jar -Dfile=j-text-utils-0.3.jar -->
         </dependency>
     </dependencies>
     <build>
@@ -123,10 +126,28 @@
         <gmaven.runtime>1.5</gmaven.runtime>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>j-text-utils-repo</id>
-            <url>http://jexem.googlecode.com/svn/trunk/repo/</url>
-        </repository>
-    </repositories>
+    <profiles>
+        <profile>
+            <id>windows_profile</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <toolsjar>${java.home}/../lib/tools.jar</toolsjar>
+            </properties>
+        </profile>
+        <profile>
+            <id>osx_profile</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <properties>
+                <toolsjar>${java.home}/../Classes/classes.jar</toolsjar>
+            </properties>
+        </profile>
+    </profiles>
 </project>
