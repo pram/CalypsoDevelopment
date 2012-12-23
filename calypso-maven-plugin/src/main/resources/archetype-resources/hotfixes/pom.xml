@@ -15,6 +15,7 @@
     <packaging>jar</packaging>
 
     <name>${rootArtifactId}::${artifactId}</name>
+    <description>Management of Hotfixes issued by Calypso</description>
     <url>http://maven.apache.org</url>
 
     <properties>
