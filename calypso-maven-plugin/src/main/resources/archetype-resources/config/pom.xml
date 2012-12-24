@@ -29,6 +29,9 @@
                 <groupId>com.naughtyzombie.calypso.maven</groupId>
                 <artifactId>calypso-maven-plugin</artifactId>
                 <version>1.0-SNAPSHOT</version>
+                <configuration>
+                    <controlModule>true</controlModule>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>process-resources</phase>

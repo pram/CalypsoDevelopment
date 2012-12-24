@@ -176,7 +176,7 @@ The output of which looks like
 
 You can define your own catalogs in the `config` module. They must be named `calypso-catalog-env.xml` or `calypso-catalog-xxx.xml` where xxx corresponds to the calypso.env.name property ie
 
-    mvn calypso:status -Dcalypso.env.name=DEV1
+    mvn calypso:status -DprocessCatalog=env -Dcalypso.env.name=DEV1
 
 ##Displaying the Calypso Dependency Tree##
 
@@ -247,3 +247,21 @@ Will show
              |   `-- PresentationServer'{ className='com.calypso.apps.startup.StartPresentationServer', id='PS_AdHoc'}
              `-- CalculationServer'{ className='com.calypso.apps.startup.StartCalculationServer', id='CS_Official'}
                 `-- PresentationServer'{ className='com.calypso.apps.startup.StartPresentationServer', id='PS_Official'}
+
+If you want to see the process catalog for the sample catalog included in the config module then type the following
+
+    mvn calypso:tree -DprocessCatalog=env -Dcalypso.env.name=DEV1
+
+This will display
+
+    -- EventServer'{ className='com.calypso.apps.startup.StartEventServer'}
+   `-- AuthService'{ className='com.calypso.apps.startup.StartAuthService'}
+      `-- DataServer'{ className='com.calypso.apps.startup.StartDataServer'}
+         |-- CalculationServer'{ className='com.calypso.apps.startup.StartCalculationServer', id='CS_AdHoc'}
+         |   `-- PresentationServer'{ className='com.calypso.apps.startup.StartPresentationServer', id='PS_AdHoc'}
+         |-- CalculationServer'{ className='com.calypso.apps.startup.StartCalculationServer', id='CS_Official'}
+         |   `-- PresentationServer'{ className='com.calypso.apps.startup.StartPresentationServer', id='PS_Official'}
+         |-- TransferEngine'{ className='com.calypso.apps.startup.StartTransferEngine'}
+         `-- TaskEngine'{ className='com.calypso.apps.startup.StartTaskEngine'}
+
+To see output for a custom process catalog, then replace `DEV1` above with the desired catalog name. Ensure that the file calypso-catalog-<env>.xml exists on the classpath.

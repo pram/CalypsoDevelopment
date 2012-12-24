@@ -70,11 +70,18 @@ public class TreeMojo extends AbstractMojo {
      */
     private MavenProject project;
 
+    /**
+     * Denotes if this is a control module
+     *
+     * @parameter property="controlModule" default-value="false"
+     */
+    private boolean controlModule;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
 
         //Only run against parent project.
-        if (this.project.getParent() == null) {
+        if (controlModule) {
 
 //            CalypsoProcessRequest cpRequest = new CalypsoProcessRequest();
 
