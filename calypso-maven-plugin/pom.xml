@@ -41,7 +41,6 @@
             <scope>system</scope>
             <systemPath>${toolsjar}</systemPath>
             <optional>true</optional>
-            <!-- mvn install:install-file -DgroupId=com.sun -DartifactId=tools -Dversion=1.6 -Dpackaging=jar -Dfile=C:\java\jdk1.6.0_35\lib\tools.jar-->
         </dependency>
         <dependency>
             <groupId>commons-cli</groupId>
