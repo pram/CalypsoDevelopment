@@ -41,6 +41,9 @@ out
 calypso-maven-plugin/calypso-maven-plugin.iml
 calypso-maven-plugin/.idea/
 calypso-maven-plugin/target/
+InMemDS/target/
+InMemDS/*.iml
+InMemDS/.idea/
 
 
 #################
