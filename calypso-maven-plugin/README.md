@@ -38,9 +38,8 @@ This will create the project with the following structure.
     |   \---src
     |       \---main
     |           \---config
-    |               +---dev
-    |               +---prod
-    |               \---qa
+    |           \---resources
+    |
     +---custom
     |   |   pom.xml
     |   |
