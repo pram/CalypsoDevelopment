@@ -5,7 +5,7 @@ This is a general purpose Maven plugin to help with the development of any Calyp
 
 ##Installation##
 
-After checking out the project you will need to resolve a couple of dependency issues. `com.sun::tools` and `com.brsanthu::data-exporter` are not registered with Maven Central and must be installed locally (or within your repository) to continue.  You must also install MaCHe (https://github.com/pram/CalypsoDevelopment/tree/master/MaCHe) into your local/remote repository in order to use the release module.
+After checking out the project you will need to resolve a couple of dependency issues. `dnl.utils::j-text-utils` and `com.brsanthu::data-exporter` are not registered with Maven Central and must be installed locally (or within your repository) to continue. The commands to grab and install the files are located within the pom file itself.  You must also install MaCHe (https://github.com/pram/CalypsoDevelopment/tree/master/MaCHe) into your local/remote repository in order to use the release module.
 
 Once this step is complete you can run
 
@@ -254,13 +254,13 @@ If you want to see the process catalog for the sample catalog included in the co
 This will display
 
     -- EventServer'{ className='com.calypso.apps.startup.StartEventServer'}
-   `-- AuthService'{ className='com.calypso.apps.startup.StartAuthService'}
-      `-- DataServer'{ className='com.calypso.apps.startup.StartDataServer'}
-         |-- CalculationServer'{ className='com.calypso.apps.startup.StartCalculationServer', id='CS_AdHoc'}
-         |   `-- PresentationServer'{ className='com.calypso.apps.startup.StartPresentationServer', id='PS_AdHoc'}
-         |-- CalculationServer'{ className='com.calypso.apps.startup.StartCalculationServer', id='CS_Official'}
-         |   `-- PresentationServer'{ className='com.calypso.apps.startup.StartPresentationServer', id='PS_Official'}
-         |-- TransferEngine'{ className='com.calypso.apps.startup.StartTransferEngine'}
-         `-- TaskEngine'{ className='com.calypso.apps.startup.StartTaskEngine'}
+       `-- AuthService'{ className='com.calypso.apps.startup.StartAuthService'}
+          `-- DataServer'{ className='com.calypso.apps.startup.StartDataServer'}
+             |-- CalculationServer'{ className='com.calypso.apps.startup.StartCalculationServer', id='CS_AdHoc'}
+             |   `-- PresentationServer'{ className='com.calypso.apps.startup.StartPresentationServer', id='PS_AdHoc'}
+             |-- CalculationServer'{ className='com.calypso.apps.startup.StartCalculationServer', id='CS_Official'}
+             |   `-- PresentationServer'{ className='com.calypso.apps.startup.StartPresentationServer', id='PS_Official'}
+             |-- TransferEngine'{ className='com.calypso.apps.startup.StartTransferEngine'}
+             `-- TaskEngine'{ className='com.calypso.apps.startup.StartTaskEngine'}
 
 To see output for a custom process catalog, then replace `DEV1` above with the desired catalog name. Ensure that the file calypso-catalog-<env>.xml exists on the classpath.
