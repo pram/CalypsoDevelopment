@@ -40,26 +40,6 @@
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <unjar src="${project.basedir}/src/main/resources/calypsorel${calypso.version}.jar" dest="${calypso.unpacked.release}"/>
-                                <delete>
-                                    <fileset dir="${project.build.outputDirectory}" includes="**/*.jar"/>
-                                </delete>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>com.naughtyzombie.calypso.maven</groupId>
                 <artifactId>calypso-maven-plugin</artifactId>
                 <version>${version}</version>
@@ -101,5 +81,58 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>initial</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <unjar src="${project.basedir}/src/main/resources/calypsorel${calypso.version}.jar" dest="${calypso.unpacked.release}"/>
+                                        <delete>
+                                            <fileset dir="${project.build.outputDirectory}" includes="**/*.jar"/>
+                                        </delete>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.naughtyzombie.calypso.maven</groupId>
+                        <artifactId>calypso-maven-plugin</artifactId>
+                        <version>1.0-SNAPSHOT</version>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>install-calypso-jars</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <managementModule>true</managementModule>
+                            <processCatalog>FULL</processCatalog>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.naughtyzombie.mache</groupId>
+                                <artifactId>mache</artifactId>
+                                <version>${mache.version}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

@@ -65,7 +65,7 @@ class InstallCalypsoJarsMojo extends GroovyMojo {
     /**
      * Temp dir
      *
-     * @parameter property="buildDir" default-value="${project.build.directory}/mache"
+     * @parameter property="buildDir" default-value="${project.build.directory}/mache/${calypso.version}"
      */
     private String buildDir
 

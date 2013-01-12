@@ -20,7 +20,7 @@ To create a new Calypso project run the following command
 
 Replace the values for the parameters `groupID`, `artifactId` and `version` with your desired values. You will also be asked to enter the Calypso version that you will be working with. You can either add the following
 
-    -DcalypsoVerision=XXxxxx[SPy]
+    -DcalypsoVersion=XXxxxx[SPy]
 
 to the archetype generation command above, or you will be asked to enter the version number interactively eg
 
@@ -74,9 +74,9 @@ Navigate to the newly created project
 
 and check that the installation has worked as expected by compiling the project (The project is empty at this stage but should still compile)
 
-    mvn install
+    mvn compile
 
-You should see something like the snipped below when this process finishes
+You should see something like the snippet below when this process finishes
 
     [INFO] ------------------------------------------------------------------------
     [INFO] Reactor Summary:
@@ -94,6 +94,20 @@ You should see something like the snipped below when this process finishes
     [INFO] Finished at: Tue Dec 18 12:00:11 EET 2012
     [INFO] Final Memory: 5M/15M
     [INFO] ------------------------------------------------------------------------
+
+##Installing Calypso Resources##
+
+Download the release jar from the Calypso web site(http://www.calypso.com) using your client login details. Place the downloaded jar in the folder $ARTIFACT_ID\releases\src\main\resources. You specified the artifact id when the you used the archetype generate command above (which was calypsoexample)
+
+Now run the following command
+
+    mvn compile -P initial
+
+This will process the Calypso release and generate the commands required for installing Calypso into your local repository, remote repository, as well as the pom fragment that needs to be added to the dependencies section of the parent pom. These will be located in $ARTIFACT_ID\releases\target\mache\$VERSION\. The script files can be directly executed on *nix. On windows, open the script file, ctrl-a and paste into a command window. This will take a while to complete.
+
+Once this is done, you can copy the pom fragment into the dependencies section of the parent pom file in $ARTIFACT_ID/pom.xml
+
+You are now ready to develop and deploy Calypso releases.
 
 ##Running Calypso Processes##
 
