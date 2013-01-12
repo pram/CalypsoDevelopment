@@ -103,7 +103,7 @@ Now run the following command
 
     mvn compile -P initial
 
-This will process the Calypso release and generate the commands required for installing Calypso into your local repository, remote repository, as well as the pom fragment that needs to be added to the dependencies section of the parent pom. These will be located in $ARTIFACT_ID\releases\target\mache\$VERSION\. The script files can be directly executed on *nix. On windows, open the script file, ctrl-a and paste into a command window. This will take a while to complete.
+This will process the Calypso release and generate the commands required for installing Calypso into your local repository, remote repository, as well as the pom fragment that needs to be added to the dependencies section of the parent pom. These will be located in $ARTIFACT_ID\releases\target\mache\$VERSION\. The deploy script has the repository URL as 'dummy'. You should replace this with the correct url for your repository. The script files can be directly executed on *nix. On windows, open the script file, ctrl-a and paste into a command window. This will take a while to complete.
 
 Once this is done, you can copy the pom fragment into the dependencies section of the parent pom file in $ARTIFACT_ID/pom.xml
 
