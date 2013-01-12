@@ -79,6 +79,11 @@
                 <version>2.6</version>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>${project.build.directory}/unpacked/${calypso.version}/resources</directory>
+            </resource>
+        </resources>
     </build>
 
     <profiles>
