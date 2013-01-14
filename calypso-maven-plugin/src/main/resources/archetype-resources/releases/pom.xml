@@ -15,9 +15,7 @@
     <packaging>jar</packaging>
 
     <name>${rootArtifactId}::${artifactId}</name>
-    <description>Management of Calypso release files. Download from http://www.calypso.com using your client login
-        details
-    </description>
+    <description>Management of Calypso release files. Download from http://www.calypso.com using your client login details</description>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -62,7 +60,51 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>2.6</version>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-deployment</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/deployment</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}/unpacked/${calypso.version}</directory>
+                                    <excludes>
+                                        <exclude>samples/**/*</exclude>
+                                        <exclude>META-INF/**/*</exclude>
+                                        <exclude>legal/**/*</exclude>
+                                        <exclude>jar-src/**/*</exclude>
+                                        <exclude>html/**/*</exclude>
+                                        <exclude>docs/**/*</exclude>
+                                        <exclude>*.txt</exclude>
+                                    </excludes>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <excludes>
+                    <exclude>**/calypsorel*.jar</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>${project.build.directory}/deployment</directory>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
     </build>
 
     <profiles>
@@ -75,14 +117,13 @@
                         <version>1.7</version>
                         <executions>
                             <execution>
-                                <phase>initialize</phase>
+                                <phase>process-resources</phase>
                                 <goals>
                                     <goal>run</goal>
                                 </goals>
                                 <configuration>
                                     <target>
-                                        <unjar src="${project.basedir}/src/main/resources/calypsorel${calypso.version}.jar"
-                                               dest="${calypso.unpacked.release}"/>
+                                        <unjar src="${project.basedir}/src/main/resources/calypsorel${calypso.version}.jar" dest="${calypso.unpacked.release}"/>
                                         <delete>
                                             <fileset dir="${project.build.outputDirectory}" includes="**/*.jar"/>
                                         </delete>
@@ -169,7 +210,6 @@
                 </resources>
             </build>
         </profile>
-
     </profiles>
 
 </project>
