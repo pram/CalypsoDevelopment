@@ -26,14 +26,28 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.naughtyzombie.mache</groupId>
-            <artifactId>mache</artifactId>
-            <version>${mache.version}</version>
+            <groupId>com.newinstall.calypso</groupId>
+            <artifactId>hotfixes</artifactId>
+            <version>${version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.newinstall.calypso</groupId>
+            <artifactId>custom</artifactId>
+            <version>${version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.newinstall.calypso</groupId>
             <artifactId>config</artifactId>
             <version>${version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.naughtyzombie.mache</groupId>
+            <artifactId>mache</artifactId>
+            <version>${mache.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -43,6 +57,36 @@
                 <groupId>com.naughtyzombie.calypso.maven</groupId>
                 <artifactId>calypso-maven-plugin</artifactId>
                 <version>${version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-classpath-windows</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>build-classpath</goal>
+                        </goals>
+                        <configuration>
+                            <scope>runtime</scope>
+                            <pathSeparator>,</pathSeparator>
+                            <prefix>..\jars</prefix>
+                            <fileSeparator>\</fileSeparator>
+                            <outputFile>${project.build.directory}/deployment/bin/classpath.windows</outputFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-classpath-unix</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>build-classpath</goal>
+                        </goals>
+                        <configuration>
+                            <scope>runtime</scope>
+                            <pathSeparator>:</pathSeparator>
+                            <prefix>../jars</prefix>
+                            <fileSeparator>/</fileSeparator>
+                            <outputFile>${project.build.directory}/deployment/bin/classpath.unix</outputFile>
+                        </configuration>
+                    </execution>
+                </executions>
                 <configuration>
                     <managementModule>true</managementModule>
                     <processCatalog>FULL</processCatalog>
@@ -54,11 +98,6 @@
                         <version>${mache.version}</version>
                     </dependency>
                 </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.6</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -80,6 +119,7 @@
                                         <exclude>samples/**/*</exclude>
                                         <exclude>META-INF/**/*</exclude>
                                         <exclude>legal/**/*</exclude>
+                                        <exclude>jars/**/*</exclude>
                                         <exclude>jar-src/**/*</exclude>
                                         <exclude>html/**/*</exclude>
                                         <exclude>docs/**/*</exclude>
@@ -91,6 +131,33 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/deployment/jars</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <overWriteReleases>false</overWriteReleases>
+                    <overWriteSnapshots>true</overWriteSnapshots>
+                    <overWriteIfNewer>true</overWriteIfNewer>
+                    <excludeTransitive>true</excludeTransitive>
+                    <includeScope>runtime</includeScope>
+                    <regenerateFile>true</regenerateFile>
+
+                </configuration>
+
             </plugin>
         </plugins>
         <resources>
@@ -138,7 +205,7 @@
                         <version>1.0-SNAPSHOT</version>
                         <executions>
                             <execution>
-                                <phase>process-resources</phase>
+                                <phase>compile</phase>
                                 <goals>
                                     <goal>install-calypso-jars</goal>
                                 </goals>
@@ -211,5 +278,4 @@
             </build>
         </profile>
     </profiles>
-
 </project>
