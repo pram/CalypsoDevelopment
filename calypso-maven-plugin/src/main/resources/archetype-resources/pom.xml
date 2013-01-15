@@ -27,6 +27,7 @@
             <groupId>com.naughtyzombie.calypso.maven</groupId>
             <artifactId>calypso-maven-plugin</artifactId>
             <version>${archetypeVersion}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
