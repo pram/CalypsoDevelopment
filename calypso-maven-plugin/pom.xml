@@ -72,6 +72,17 @@
             <!-- curl -O http://j-text-utils.googlecode.com/files/j-text-utils-0.3.jar -->
             <!-- mvn install:install-file -DgroupId=dnl.utils -DartifactId=j-text-utils -Dversion=0.3 -Dpackaging=jar -Dfile=j-text-utils-0.3.jar -->
         </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.2</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
