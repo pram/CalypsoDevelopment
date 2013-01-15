@@ -19,6 +19,7 @@ package com.naughtyzombie.calypso.maven.mojo;
  * under the License.
  */
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.ScopeArtifactFilter;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
@@ -178,6 +179,15 @@ public class BuildClasspathMojo
     @Parameter( property = "appendOutput", defaultValue = "false" )
     private boolean appendOutput;
 
+    @Parameter (property = "pathSeparator", defaultValue = "/")
+    private String pathSeparator;
+
+    @Parameter(property = "prefix", defaultValue = "")
+    private String prefix;
+
+    @Parameter(property = "fileSeparator", defaultValue = ":")
+    private String fileSeparator;
+
     // Mojo methods -----------------------------------------------------------
 
     /*
@@ -280,30 +290,25 @@ public class BuildClasspathMojo
      */
     private String serializeDependencyTree( DependencyNode rootNode )
     {
-        return null;
-//        StringWriter writer = new StringWriter();
-//
-//        DependencyNodeVisitor visitor = getSerializingDependencyNodeVisitor( writer );
-//
-//        // TODO: remove the need for this when the serializer can calculate last nodes from visitor calls only
-//        visitor = new BuildingDependencyNodeVisitor( visitor );
-//
-//        DependencyNodeFilter filter = createDependencyNodeFilter();
-//
-//        if ( filter != null )
-//        {
-//            CollectingDependencyNodeVisitor collectingVisitor = new CollectingDependencyNodeVisitor();
-//            DependencyNodeVisitor firstPassVisitor = new FilteringDependencyNodeVisitor( collectingVisitor, filter );
-//            rootNode.accept( firstPassVisitor );
-//
-//            DependencyNodeFilter secondPassFilter =
-//                    new AncestorOrSelfDependencyNodeFilter( collectingVisitor.getNodes() );
-//            visitor = new FilteringDependencyNodeVisitor( visitor, secondPassFilter );
-//        }
-//
-//        rootNode.accept( visitor );
-//
-//        return writer.toString();
+        StringBuilder sb = new StringBuilder();
+
+        List<DependencyNode> children = rootNode.getChildren();
+
+        for (DependencyNode node : children) {
+            Artifact artifact = node.getArtifact();
+            sb.append(prefix);
+            sb.append(fileSeparator);
+            sb.append(artifact.getArtifactId());
+            sb.append("-");
+            sb.append(artifact.getVersion());
+            sb.append(".");
+            sb.append(artifact.getType());
+            sb.append(pathSeparator);
+        }
+
+
+        return sb.toString();
+
     }
 
     public DependencyNodeVisitor getSerializingDependencyNodeVisitor( Writer writer )
