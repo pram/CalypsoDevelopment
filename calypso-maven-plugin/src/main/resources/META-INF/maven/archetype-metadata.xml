@@ -47,7 +47,7 @@
                 <fileSet filtered="true" packaged="false">
                     <directory>src/main/resources</directory>
                     <includes>
-                        <include>**/*.*</include>
+                        <include>**/*</include>
                     </includes>
                 </fileSet>
             </fileSets>
