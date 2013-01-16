@@ -44,6 +44,12 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>com.newinstall.calypso</groupId>
+            <artifactId>scripts</artifactId>
+            <version>${version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.naughtyzombie.mache</groupId>
             <artifactId>mache</artifactId>
             <version>${mache.version}</version>
@@ -66,7 +72,7 @@
                         </goals>
                         <configuration>
                             <scope>runtime</scope>
-                            <pathSeparator>,</pathSeparator>
+                            <pathSeparator>;</pathSeparator>
                             <prefix>..\jars</prefix>
                             <fileSeparator>\</fileSeparator>
                             <outputFile>${project.build.directory}/deployment/bin/classpath.windows</outputFile>
@@ -138,13 +144,26 @@
                 <version>2.6</version>
                 <executions>
                     <execution>
-                        <id>copy-dependencies</id>
+                        <id>copy-calypso-jars</id>
                         <phase>package</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
                             <outputDirectory>${project.build.directory}/deployment/jars</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-calypso-scripts</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/deployment</outputDirectory>
+                            <includeGroupIds>${project.parent.groupId}</includeGroupIds>
+                            <excludes>META-INF/**</excludes>
+                            <includeArtifactIds>scripts</includeArtifactIds>
                         </configuration>
                     </execution>
                 </executions>
@@ -155,9 +174,7 @@
                     <excludeTransitive>true</excludeTransitive>
                     <includeScope>runtime</includeScope>
                     <regenerateFile>true</regenerateFile>
-
                 </configuration>
-
             </plugin>
         </plugins>
         <resources>
