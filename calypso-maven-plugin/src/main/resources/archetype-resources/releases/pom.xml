@@ -26,25 +26,25 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.newinstall.calypso</groupId>
+            <groupId>${groupId}</groupId>
             <artifactId>hotfixes</artifactId>
             <version>${version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>com.newinstall.calypso</groupId>
+            <groupId>${groupId}</groupId>
             <artifactId>custom</artifactId>
             <version>${version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>com.newinstall.calypso</groupId>
+            <groupId>${groupId}</groupId>
             <artifactId>config</artifactId>
             <version>${version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>com.newinstall.calypso</groupId>
+            <groupId>${groupId}</groupId>
             <artifactId>scripts</artifactId>
             <version>${version}</version>
             <scope>provided</scope>
