@@ -50,7 +50,7 @@ shift
 goto start
 :next
 
-%P% %JAVAEXE% -Xmx128m -XX:MaxPermSize=80m -Dsun.rmi.transport.tcp.handshakeTimeout=1200000 -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 %JAVA_ARGS%
+%P% %JAVAEXE% -cp %CLASSPATH% -Xmx128m -XX:MaxPermSize=80m -Dsun.rmi.transport.tcp.handshakeTimeout=1200000 -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 %JAVA_ARGS%
 rem echo %P% %JAVAEXE% -Xmx128m -XX:MaxPermSize=128m  -Dsun.rmi.transport.tcp.handshakeTimeout=1200000 -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 %JAVA_ARGS%
 
 endlocal
