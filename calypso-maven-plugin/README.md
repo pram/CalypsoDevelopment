@@ -72,9 +72,18 @@ Navigate to the newly created project
 
     cd calypsoexample
 
-and check that the installation has worked as expected by compiling the project (The project is empty at this stage but should still compile)
+##Installing Calypso Resources##
 
-    mvn compile
+Download the release jar from the Calypso web site(http://www.calypso.com) using your client login details. Place the downloaded jar in the folder $ARTIFACT_ID\releases\src\main\resources. You specified the artifact id when the you used the archetype generate command above (which was calypsoexample)
+
+Now run the following command
+
+    mvn -P initial process-resources
+
+If you get an error running the above command then you will have to install the modules
+
+    mvn install
+
 
 You should see something like the snippet below when this process finishes
 
@@ -95,17 +104,29 @@ You should see something like the snippet below when this process finishes
     [INFO] Final Memory: 5M/15M
     [INFO] ------------------------------------------------------------------------
 
-##Installing Calypso Resources##
-
-Download the release jar from the Calypso web site(http://www.calypso.com) using your client login details. Place the downloaded jar in the folder $ARTIFACT_ID\releases\src\main\resources. You specified the artifact id when the you used the archetype generate command above (which was calypsoexample)
-
-Now run the following command
-
-    mvn process-resources -P initial
+If you have already installed the resources for this particular release you can skip this paragraph
 
 This will process the Calypso release and generate the commands required for installing Calypso into your local repository, remote repository, as well as the pom fragment that needs to be added to the dependencies section of the parent pom. These will be located in $ARTIFACT_ID\releases\target\mache\$VERSION\. The deploy script has the repository URL as 'dummy'. You should replace this with the correct url for your repository. The script files can be directly executed on *nix. On windows, open the script file, ctrl-a and paste into a command window. This will take a while to complete.
 
 Once this is done, you can copy the pom fragment into the dependencies section of the parent pom file in $ARTIFACT_ID/pom.xml
+
+You can now construct the deployment file. Run
+
+    mvn install
+
+to do this.
+
+To test that the install is working as expected on Windows run
+
+    mvn -P test -pl releases test
+
+The AppStarter application will start. Make sure that there are no exceptions when launched.
+
+If you want to test the deployment itself then navigate to `<parent>\releases\target\deployment\bin` and run the command
+
+    rj com.calypso.apps.startup.StartAppWindow
+
+The AppStarter window should now appear.
 
 You are now ready to develop and deploy Calypso releases.
 

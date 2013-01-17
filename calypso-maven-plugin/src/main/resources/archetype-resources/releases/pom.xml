@@ -22,6 +22,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <calypso.unpacked.release>${project.build.directory}/unpacked/${calypso.version}</calypso.unpacked.release>
         <mache.version>1.0-SNAPSHOT</mache.version>
+        <!-- For an explanation of how to split out the classes folder on a per profile basis look here
+         http://www.jroller.com/eu/entry/configuring_separate_maven_output_folders-->
         <target.dir>target</target.dir>
         <classes.dir>classes</classes.dir>
     </properties>
