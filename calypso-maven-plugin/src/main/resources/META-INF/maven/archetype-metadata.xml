@@ -8,6 +8,12 @@
         <requiredProperty key="calypsoGroup">
             <defaultValue>com.calypso</defaultValue>
         </requiredProperty>
+        <requiredProperty key="cup">
+            <defaultValue>calypsouser.properties</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="csp">
+            <defaultValue>calypsosystem.properties</defaultValue>
+        </requiredProperty>
     </requiredProperties>
     <modules>
         <module id="config" dir="config" name="config">

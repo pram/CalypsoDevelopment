@@ -39,7 +39,7 @@
                             <goal>generate-properties</goal>
                         </goals>
                         <configuration>
-                            <version>120000SP6</version>
+                            <version>${calypso.version}</version>
                         </configuration>
                     </execution>
                 </executions>
