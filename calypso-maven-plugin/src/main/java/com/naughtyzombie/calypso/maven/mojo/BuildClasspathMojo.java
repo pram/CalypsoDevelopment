@@ -63,10 +63,9 @@ import java.util.List;
  * @version $Id: TreeMojo.java 1400739 2012-10-21 23:05:22Z hboutemy $
  * @since 2.0-alpha-5
  */
-@Mojo( name = "build-classpath", requiresDependencyResolution = ResolutionScope.TEST, threadSafe = true )
-public class BuildClasspathMojo
-        extends AbstractMojo
-{
+
+@Mojo(name = "build-classpath", requiresDependencyResolution = ResolutionScope.TEST, threadSafe = true)
+public class BuildClasspathMojo extends AbstractMojo {
     // fields -----------------------------------------------------------------
 
     /**
@@ -78,7 +77,7 @@ public class BuildClasspathMojo
     /**
      * The dependency tree builder to use.
      */
-    @Component( hint = "default" )
+    @Component(hint = "default")
     private DependencyGraphBuilder dependencyGraphBuilder;
 
     /**
@@ -87,7 +86,7 @@ public class BuildClasspathMojo
      *
      * @deprecated use outputFile instead.
      */
-    @Parameter( property = "output" )
+    @Parameter(property = "output")
     private File output;
 
     /**
@@ -96,7 +95,7 @@ public class BuildClasspathMojo
      *
      * @since 2.0-alpha-5
      */
-    @Parameter( property = "outputFile" )
+    @Parameter(property = "outputFile")
     private File outputFile;
 
     /**
@@ -108,7 +107,7 @@ public class BuildClasspathMojo
      *
      * @since 2.2
      */
-    @Parameter( property = "outputType", defaultValue = "text" )
+    @Parameter(property = "outputType", defaultValue = "text")
     private String outputType;
 
     /**
@@ -118,7 +117,7 @@ public class BuildClasspathMojo
      * @see <a href="http://jira.codehaus.org/browse/MNG-3236">MNG-3236</a>
      * @since 2.0-alpha-5
      */
-    @Parameter( property = "scope" )
+    @Parameter(property = "scope")
     private String scope;
 
     /**
@@ -127,7 +126,7 @@ public class BuildClasspathMojo
      * @since 2.0-alpha-6
      * @deprecated in 2.5
      */
-    @Parameter( property = "verbose", defaultValue = "false" )
+    @Parameter(property = "verbose", defaultValue = "false")
     private boolean verbose;
 
     /**
@@ -137,7 +136,7 @@ public class BuildClasspathMojo
      *
      * @since 2.0-alpha-6
      */
-    @Parameter( property = "tokens", defaultValue = "standard" )
+    @Parameter(property = "tokens", defaultValue = "standard")
     private String tokens;
 
     /**
@@ -147,7 +146,7 @@ public class BuildClasspathMojo
      * @see StrictPatternIncludesArtifactFilter
      * @since 2.0-alpha-6
      */
-    @Parameter( property = "includes" )
+    @Parameter(property = "includes")
     private String includes;
 
     /**
@@ -158,7 +157,7 @@ public class BuildClasspathMojo
      * @see StrictPatternExcludesArtifactFilter
      * @since 2.0-alpha-6
      */
-    @Parameter( property = "excludes" )
+    @Parameter(property = "excludes")
     private String excludes;
 
     /**
@@ -171,10 +170,10 @@ public class BuildClasspathMojo
      *
      * @since 2.2
      */
-    @Parameter( property = "appendOutput", defaultValue = "false" )
+    @Parameter(property = "appendOutput", defaultValue = "false")
     private boolean appendOutput;
 
-    @Parameter (property = "pathSeparator", defaultValue = "/")
+    @Parameter(property = "pathSeparator", defaultValue = "/")
     private String pathSeparator;
 
     @Parameter(property = "prefix", defaultValue = "")
@@ -189,43 +188,33 @@ public class BuildClasspathMojo
      * @see org.apache.maven.plugin.Mojo#execute()
      */
     public void execute()
-            throws MojoExecutionException, MojoFailureException
-    {
+            throws MojoExecutionException, MojoFailureException {
 
-        if ( output != null )
-        {
-            getLog().warn( "The parameter output is deprecated. Use outputFile instead." );
+        if (output != null) {
+            getLog().warn("The parameter output is deprecated. Use outputFile instead.");
             this.outputFile = output;
         }
 
         ArtifactFilter artifactFilter = createResolvingArtifactFilter();
 
-        try
-        {
+        try {
             // TODO: note that filter does not get applied due to MNG-3236
 
-            rootNode = dependencyGraphBuilder.buildDependencyGraph( project, artifactFilter );
+            rootNode = dependencyGraphBuilder.buildDependencyGraph(project, artifactFilter);
 
-            String dependencyTreeString = serializeDependencyTree( rootNode );
+            String dependencyTreeString = serializeDependencyTree(rootNode);
 
-            if ( outputFile != null )
-            {
-                DependencyUtil.write( dependencyTreeString, outputFile, this.appendOutput, getLog() );
+            if (outputFile != null) {
+                DependencyUtil.write(dependencyTreeString, outputFile, this.appendOutput, getLog());
 
-                getLog().info( "Wrote dependency tree to: " + outputFile );
+                getLog().info("Wrote dependency tree to: " + outputFile);
+            } else {
+                DependencyUtil.log(dependencyTreeString, getLog());
             }
-            else
-            {
-                DependencyUtil.log( dependencyTreeString, getLog() );
-            }
-        }
-        catch ( DependencyGraphBuilderException exception )
-        {
-            throw new MojoExecutionException( "Cannot build project dependency graph", exception );
-        }
-        catch ( IOException exception )
-        {
-            throw new MojoExecutionException( "Cannot serialise project dependency graph", exception );
+        } catch (DependencyGraphBuilderException exception) {
+            throw new MojoExecutionException("Cannot build project dependency graph", exception);
+        } catch (IOException exception) {
+            throw new MojoExecutionException("Cannot serialise project dependency graph", exception);
         }
     }
 
@@ -236,8 +225,7 @@ public class BuildClasspathMojo
      *
      * @return the Maven project
      */
-    public MavenProject getProject()
-    {
+    public MavenProject getProject() {
         return project;
     }
 
@@ -246,8 +234,7 @@ public class BuildClasspathMojo
      *
      * @return the dependency tree root node
      */
-    public DependencyNode getDependencyGraph()
-    {
+    public DependencyNode getDependencyGraph() {
         return rootNode;
     }
 
@@ -258,19 +245,15 @@ public class BuildClasspathMojo
      *
      * @return the artifact filter
      */
-    private ArtifactFilter createResolvingArtifactFilter()
-    {
+    private ArtifactFilter createResolvingArtifactFilter() {
         ArtifactFilter filter;
 
         // filter scope
-        if ( scope != null )
-        {
-            getLog().debug( "+ Resolving dependency tree for scope '" + scope + "'" );
+        if (scope != null) {
+            getLog().debug("+ Resolving dependency tree for scope '" + scope + "'");
 
-            filter = new ScopeArtifactFilter( scope );
-        }
-        else
-        {
+            filter = new ScopeArtifactFilter(scope);
+        } else {
             filter = null;
         }
 
@@ -283,8 +266,7 @@ public class BuildClasspathMojo
      * @param rootNode the dependency tree root node to serialize
      * @return the serialized dependency tree
      */
-    private String serializeDependencyTree( DependencyNode rootNode )
-    {
+    private String serializeDependencyTree(DependencyNode rootNode) {
         StringBuilder sb = new StringBuilder();
 
         List<DependencyNode> children = rootNode.getChildren();
@@ -306,23 +288,15 @@ public class BuildClasspathMojo
 
     }
 
-    public DependencyNodeVisitor getSerializingDependencyNodeVisitor( Writer writer )
-    {
-        if ( "graphml".equals( outputType ) )
-        {
-            return new GraphmlDependencyNodeVisitor( writer );
-        }
-        else if ( "tgf".equals( outputType ) )
-        {
-            return new TGFDependencyNodeVisitor( writer );
-        }
-        else if ( "dot".equals( outputType ) )
-        {
-            return new DOTDependencyNodeVisitor( writer );
-        }
-        else
-        {
-            return new SerializingDependencyNodeVisitor( writer, toTreeTokens( tokens ) );
+    public DependencyNodeVisitor getSerializingDependencyNodeVisitor(Writer writer) {
+        if ("graphml".equals(outputType)) {
+            return new GraphmlDependencyNodeVisitor(writer);
+        } else if ("tgf".equals(outputType)) {
+            return new TGFDependencyNodeVisitor(writer);
+        } else if ("dot".equals(outputType)) {
+            return new DOTDependencyNodeVisitor(writer);
+        } else {
+            return new SerializingDependencyNodeVisitor(writer, toTreeTokens(tokens));
         }
     }
 
@@ -332,24 +306,18 @@ public class BuildClasspathMojo
      * @param tokens the tree tokens name
      * @return the <code>TreeTokens</code> instance
      */
-    private TreeTokens toTreeTokens( String tokens )
-    {
+    private TreeTokens toTreeTokens(String tokens) {
         TreeTokens treeTokens;
 
-        if ( "whitespace".equals( tokens ) )
-        {
-            getLog().debug( "+ Using whitespace tree tokens" );
+        if ("whitespace".equals(tokens)) {
+            getLog().debug("+ Using whitespace tree tokens");
 
             treeTokens = SerializingDependencyNodeVisitor.WHITESPACE_TOKENS;
-        }
-        else if ( "extended".equals( tokens ) )
-        {
-            getLog().debug( "+ Using extended tree tokens" );
+        } else if ("extended".equals(tokens)) {
+            getLog().debug("+ Using extended tree tokens");
 
             treeTokens = SerializingDependencyNodeVisitor.EXTENDED_TOKENS;
-        }
-        else
-        {
+        } else {
             treeTokens = SerializingDependencyNodeVisitor.STANDARD_TOKENS;
         }
 
@@ -361,8 +329,7 @@ public class BuildClasspathMojo
      *
      * @return the dependency node filter, or <code>null</code> if none required
      */
-    private DependencyNodeFilter createDependencyNodeFilter()
-    {
+    private DependencyNodeFilter createDependencyNodeFilter() {
         List<DependencyNodeFilter> filters = new ArrayList<DependencyNodeFilter>();
 
         // filter node states
@@ -374,28 +341,26 @@ public class BuildClasspathMojo
         }*/
 
         // filter includes
-        if ( includes != null )
-        {
-            List<String> patterns = Arrays.asList( includes.split( "," ) );
+        if (includes != null) {
+            List<String> patterns = Arrays.asList(includes.split(","));
 
-            getLog().debug( "+ Filtering dependency tree by artifact include patterns: " + patterns );
+            getLog().debug("+ Filtering dependency tree by artifact include patterns: " + patterns);
 
-            ArtifactFilter artifactFilter = new StrictPatternIncludesArtifactFilter( patterns );
-            filters.add( new ArtifactDependencyNodeFilter( artifactFilter ) );
+            ArtifactFilter artifactFilter = new StrictPatternIncludesArtifactFilter(patterns);
+            filters.add(new ArtifactDependencyNodeFilter(artifactFilter));
         }
 
         // filter excludes
-        if ( excludes != null )
-        {
-            List<String> patterns = Arrays.asList( excludes.split( "," ) );
+        if (excludes != null) {
+            List<String> patterns = Arrays.asList(excludes.split(","));
 
-            getLog().debug( "+ Filtering dependency tree by artifact exclude patterns: " + patterns );
+            getLog().debug("+ Filtering dependency tree by artifact exclude patterns: " + patterns);
 
-            ArtifactFilter artifactFilter = new StrictPatternExcludesArtifactFilter( patterns );
-            filters.add( new ArtifactDependencyNodeFilter( artifactFilter ) );
+            ArtifactFilter artifactFilter = new StrictPatternExcludesArtifactFilter(patterns);
+            filters.add(new ArtifactDependencyNodeFilter(artifactFilter));
         }
 
-        return filters.isEmpty() ? null : new AndDependencyNodeFilter( filters );
+        return filters.isEmpty() ? null : new AndDependencyNodeFilter(filters);
     }
 
     //following is required because the version handling in maven code
@@ -411,23 +376,19 @@ public class BuildClasspathMojo
      * @param theVersion   the version to be checked.
      * @return true if the version is contained by the range.
      */
-    public static boolean containsVersion( VersionRange allowedRange, ArtifactVersion theVersion )
-    {
+    public static boolean containsVersion(VersionRange allowedRange, ArtifactVersion theVersion) {
         ArtifactVersion recommendedVersion = allowedRange.getRecommendedVersion();
-        if ( recommendedVersion == null )
-        {
-            @SuppressWarnings ("unchecked") List<Restriction> restrictions = allowedRange.getRestrictions();
-            for ( Restriction restriction : restrictions )
-            {
-                if ( restriction.containsVersion( theVersion ) )
-                {
+        if (recommendedVersion == null) {
+            @SuppressWarnings("unchecked") List<Restriction> restrictions = allowedRange.getRestrictions();
+            for (Restriction restriction : restrictions) {
+                if (restriction.containsVersion(theVersion)) {
                     return true;
                 }
             }
         }
 
         // only singular versions ever have a recommendedVersion
-        return recommendedVersion.compareTo( theVersion ) <= 0;
+        return recommendedVersion.compareTo(theVersion) <= 0;
     }
 
 }
