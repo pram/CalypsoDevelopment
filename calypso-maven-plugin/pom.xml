@@ -146,8 +146,9 @@
 
     <profiles>
         <profile>
-            <id>windows_profile</id>
+            <id>default_profile</id>
             <activation>
+                <activeByDefault>true</activeByDefault>
                 <os>
                     <family>Windows</family>
                 </os>
@@ -159,6 +160,7 @@
         <profile>
             <id>osx_profile</id>
             <activation>
+                <activeByDefault>false</activeByDefault>
                 <os>
                     <family>mac</family>
                 </os>
