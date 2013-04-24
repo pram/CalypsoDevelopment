@@ -173,12 +173,32 @@ public class Worker {
     private def generateDependencyFragment(File pomFragment, String line) {
         def resultArray = line.split()
 
+        def tmpGroupId
+        def tmpArtifactId
+        def tmpVersion
+
+        resultArray.each {
+            switch (it) {
+                case ~/^-DgroupId.*$/:
+                    tmpGroupId=it.split('=')[1]
+                    break
+                case ~/^-DartifactId.*$/:
+                    tmpArtifactId=it.split('=')[1]
+                    break
+                case ~/^-Dversion.*$/:
+                    tmpVersion=it.split('=')[1]
+                    break
+                default:
+                    break
+            }
+        }
+
         def writer = new StringWriter()
         def xml = new MarkupBuilder(writer)
         xml.dependency() {
-            groupId(resultArray[2].split('=')[1])
-            artifactId(resultArray[3].split('=')[1])
-            version(resultArray[4].split('=')[1])
+            groupId(tmpGroupId)
+            artifactId(tmpArtifactId)
+            version(tmpVersion)
         }
 
         pomFragment.append(writer.toString())
