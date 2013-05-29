@@ -15,6 +15,8 @@ public class Worker {
 
     private Settings settings;
     private File workingDir;
+    //Default the execution script to the install script
+    private String executionScript = GEN_INSTALL_SCRIPT
 
     Worker(Settings settings, File workingDir) {
         this.settings = settings
@@ -61,6 +63,8 @@ public class Worker {
     }
 
     def generateDeployScript() {
+
+        this.executionScript = GEN_DEPLOY_SCRIPT
 
         if (settings.isGenerate()) {
             final script = new File(this.workingDir, GEN_DEPLOY_SCRIPT)
@@ -119,7 +123,7 @@ public class Worker {
             return
         }
         if (settings.isExecute()) {
-            final script = new File(this.workingDir, GEN_DEPLOY_SCRIPT)
+            final script = new File(this.workingDir, this.executionScript)
             if (script.exists() && script.isFile()) {
                 println "Executing " + script.getName()
 
@@ -156,7 +160,7 @@ public class Worker {
 
     def generatePomFragment() {
         if (settings.isGeneratePom()) {
-            final script = new File(this.workingDir, GEN_DEPLOY_SCRIPT)
+            final script = new File(this.workingDir, this.executionScript)
             if (script.exists() && script.isFile()) {
                 final pomFrag = new File(this.workingDir, POM_FRAGMENT)
                 pomFrag.write(' ') //clear contents of file
@@ -164,7 +168,7 @@ public class Worker {
                     generateDependencyFragment(pomFrag, line)
                 }
             } else {
-                println("Execution script has not been generated")
+                println("pom fragment has not been generated")
                 return
             }
         }

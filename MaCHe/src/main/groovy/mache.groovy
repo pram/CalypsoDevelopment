@@ -12,13 +12,14 @@ import com.naughtyzombie.mache.Settings
 Settings settings = initialize(args)
 
 if (settings) {
-    final File dir = Worker.createWorkingDir(settings)
-    final worker = new Worker(settings, dir)
-    worker.unzip()
-
     if (settings.getTmpDir() == null || settings.getTmpDir().trim().length() == 0) {
         settings.setTmpDir(".MaCHe.temp")
     }
+
+    final File dir = Worker.createWorkingDir(settings)
+    final worker = new Worker(settings, dir)
+    if (settings.isClean()) worker.cleanUp()
+    worker.unzip()
 
     if (settings.isDeploy()) {
         worker.generateDeployScript()
@@ -29,8 +30,6 @@ if (settings) {
 
     if (settings.isExecute()) worker.execute()
     if (settings.isGeneratePom()) worker.generatePomFragment()
-
-    if (settings.isClean()) worker.cleanUp()
 }
 
 def initialize(args) {
