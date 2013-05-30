@@ -15,12 +15,105 @@
     <packaging>jar</packaging>
 
     <name>${rootArtifactId}::${artifactId}</name>
-    <description>Management of Hotfixes issued by Calypso</description>
+    <description>Management of Hotfixes and Patches issued by Calypso</description>
     <url>http://maven.apache.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.classes.dir>${project.build.directory}/classes</project.classes.dir>
+        <patch.unpack.dir>${project.build.directory}/patch-unpacked</patch.unpack.dir>
+        <patch.resource.dir>${patch.unpack.dir}/resources</patch.resource.dir>
+        <patch.jar.dir>${patch.unpack.dir}/jars</patch.jar.dir>
+        <patch.bin.dir>${patch.unpack.dir}/bin</patch.bin.dir>
     </properties>
+
+    <dependencies>
+        <!-- Add Dependencies to hotfixes and patches here -->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.7</version>
+                <executions>
+                    <!-- This section is used to process precompiled classes supplied via Hotfixes -->
+                    <execution>
+                        <id>unpack-dependencies</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>com.calypso.hotfix</includeGroupIds>
+                            <excludes>**/*.java</excludes>
+                            <outputDirectory>${project.classes.dir}</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <!-- This section is used to process resources supplied via Patches -->
+                    <execution>
+                        <id>unpack-resources-secondary</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>com.calypso.patch</includeGroupIds>
+                            <includes>resources/**, resources/appconfig/**, resources/log4jconfig/**, jars/**, bin/**</includes>
+                            <excludes>**/*.txt, **/*.diff</excludes>
+                            <outputDirectory>${patch.unpack.dir}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <!-- Explode the jars into the classes area ready for packaging -->
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <unzip dest="${project.classes.dir}">
+                                    <fileset dir="${patch.jar.dir}">
+                                        <include name="**/*.jar" />
+                                    </fileset>
+                                </unzip>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>${patch.resource.dir}</directory>
+                <includes>
+                    <include>*.*</include>
+                    <include>com/**</include>
+                    <include>calypsox/**</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${patch.resource.dir}/appconfig</directory>
+            </resource>
+            <resource>
+                <directory>${patch.resource.dir}/log4jconfig</directory>
+            </resource>
+            <resource>
+                <directory>${project.build.directory}/patch-unpacked</directory>
+                <includes>
+                    <include>bin/**</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 
 
 </project>

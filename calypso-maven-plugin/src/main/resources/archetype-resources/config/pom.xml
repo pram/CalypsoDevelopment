@@ -32,9 +32,10 @@
                 <configuration>
                     <controlModule>true</controlModule>
                 </configuration>
+                <!-- create the properties files for each environment defined in the config area -->
                 <executions>
                     <execution>
-                        <phase>process-resources</phase>
+                        <phase>generate-resources</phase>
                         <goals>
                             <goal>generate-properties</goal>
                         </goals>
@@ -49,10 +50,6 @@
             <resource>
                 <directory>${project.build.directory}/generated-sources</directory>
                 <filtering>false</filtering>
-                <includes>
-                    <include>calypsosystem.properties.*</include>
-                    <include>calypsouser.properties.*</include>
-                </includes>
             </resource>
             <resource>
                 <directory>${project.basedir}/src/main/resources</directory>

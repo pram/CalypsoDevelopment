@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>${groupId}</groupId>
+        <artifactId>${rootArtifactId}</artifactId>
+        <version>${version}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <groupId>${groupId}</groupId>
+    <artifactId>${artifactId}</artifactId>
+    <version>${version}</version>
+
+
+    <name>${rootArtifactId}::${artifactId}</name>
+    <description>Static Web deployment for JNLP distribution</description>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <unpack.dir>${project.build.directory}/unpack</unpack.dir>
+        <signed.jars.dir>${project.basedir}/initial/application-jars</signed.jars.dir>
+        <generated.sources.dir>${project.build.directory}/generated-sources</generated.sources.dir>
+        <calypso.env>COPPER</calypso.env>
+        <web.root>${project.build.directory}/${project.artifactId}-${project.version}</web.root>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>hotfixes</artifactId>
+            <version>${version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>custom</artifactId>
+            <version>${version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>config</artifactId>
+            <version>${version}</version>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <!-- Extract the resource files from the Calypso release -->
+                    <execution>
+                        <id>unpack-resources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.calypso.release</groupId>
+                                    <artifactId>calypsorel</artifactId>
+                                    <version>${calypso.version}</version>
+                                    <type>jar</type>
+                                    <outputDirectory>${unpack.dir}</outputDirectory>
+                                    <includes>resources/**/*</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <!-- Extract the pregenerated jnlp files for each environment -->
+                    <execution>
+                        <id>unpack-jnlp</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.parent.groupId}</groupId>
+                                    <artifactId>config</artifactId>
+                                    <version>${project.parent.version}</version>
+                                    <type>jar</type>
+                                    <outputDirectory>${generated.sources.dir}</outputDirectory>
+                                    <includes>*launch.jnlp*</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <overWriteReleases>false</overWriteReleases>
+                    <overWriteSnapshots>true</overWriteSnapshots>
+                    <overWriteIfNewer>true</overWriteIfNewer>
+                    <excludeTransitive>true</excludeTransitive>
+                    <includeScope>runtime</includeScope>
+                    <regenerateFile>true</regenerateFile>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <!-- Create the resources jar file -->
+                    <execution>
+                        <id>prepare resources</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <echo message="Generate Resources file" />
+                                <jar destfile="${generated.sources.dir}/application-jars/resources.jar">
+                                    <fileset dir="${unpack.dir}/resources">
+                                        <include name="**/*"/>
+                                        <exclude name="log4jconfig"/>
+                                        <exclude name="appconfig"/>
+                                    </fileset>
+                                    <fileset dir="${unpack.dir}/resources/log4jconfig">
+                                        <include name="**/*"/>
+                                    </fileset>
+                                    <fileset dir="${unpack.dir}/resources/appconfig">
+                                        <include name="**/*"/>
+                                    </fileset>
+                                </jar>
+                                <echo file="${generated.sources.dir}/classpath.txt" append="true">application-jars/resources.jar;</echo>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                    <!-- Create a file to contain the links to the dependent jars in jnlp format -->
+                    <execution>
+                        <id>prepare jar list</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <echo message="Generate jar list in JNLP format"/>
+                                <copy file="${generated.sources.dir}/classpath.txt" tofile="${generated.sources.dir}/jnlp-jars.txt" overwrite="yes">
+                                    <filterchain>
+                                        <tokenfilter delimoutput=";">
+                                            <stringtokenizer />
+                                            <replaceregex pattern="(.+?)(;)" replace="&lt;jar href=&quot;\1&quot; main=&quot;false&quot;/&gt;${line.separator}" flags="gi"/>
+                                        </tokenfilter>
+                                    </filterchain>
+                                </copy>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.naughtyzombie.calypso.maven</groupId>
+                <artifactId>calypso-maven-plugin</artifactId>
+                <version>${calypso.maven.plugin.version}</version>
+                <executions>
+                    <!-- Create a file that contains the classpath as defined in the parent pom -->
+                    <execution>
+                        <id>generate-classpath-web</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>build-classpath</goal>
+                        </goals>
+                        <configuration>
+                            <scope>runtime</scope>
+                            <pathSeparator>;</pathSeparator>
+                            <prefix>application-jars</prefix>
+                            <fileSeparator>/</fileSeparator>
+                            <outputFile>${generated.sources.dir}/classpath.txt</outputFile>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.naughtyzombie.mache</groupId>
+                        <artifactId>mache</artifactId>
+                        <version>1.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.2</version>
+                <executions>
+                    <!-- Replace the links to the jars in all the jnlp template files -->
+                    <execution>
+                        <id>process jnlp files</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <basedir>${generated.sources.dir}</basedir>
+                            <includes>
+                                <include>*launch.jnlp*</include>
+                            </includes>
+                            <valueFile>${generated.sources.dir}/jnlp-jars.txt</valueFile>
+                            <token>@JAR_LIST@</token>
+                            <outputBasedir>${project.build.directory}</outputBasedir>
+                            <outputDir>classes</outputDir>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>${project.build.directory}/generated-sources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>jnlp-jars.txt</exclude>
+                    <exclude>classpath.txt</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>initial</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>2.6</version>
+                        <executions>
+                            <!-- Copy the dependent jars into the correct location -->
+                            <execution>
+                                <id>copy dependencies</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${signed.jars.dir}</outputDirectory>
+                                    <overWriteReleases>true</overWriteReleases>
+                                    <overWriteSnapshots>true</overWriteSnapshots>
+                                    <overWriteIfNewer>true</overWriteIfNewer>
+                                    <excludeGroupIds>${project.parent.groupId}</excludeGroupIds>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <excludeTransitive>true</excludeTransitive>
+                            <includeScope>runtime</includeScope>
+                            <regenerateFile>true</regenerateFile>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jarsigner-plugin</artifactId>
+                        <version>1.2</version>
+                        <executions>
+                            <execution>
+                                <id>sign</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <archiveDirectory>${signed.jars.dir}</archiveDirectory>
+                            <keystore>${project.basedir}/sign/calypsoJAWS.key</keystore>
+                            <alias>calypso</alias>
+                            <storepass>calypso</storepass>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <!-- Create the resources jar file -->
+                            <execution>
+                                <id>prepare resources</id>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <tasks>
+                                        <echo message="Copy Signed jar files" />
+                                        <copy toDir="${generated.sources.dir}/application-jars">
+                                            <fileset dir="${signed.jars.dir}"/>
+                                        </copy>
+                                    </tasks>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jarsigner-plugin</artifactId>
+                        <version>1.2</version>
+                        <executions>
+                            <execution>
+                                <id>sign</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <archiveDirectory>${project.build.directory}/classes/application-jars</archiveDirectory>
+                            <keystore>${project.basedir}/sign/calypsoJAWS.key</keystore>
+                            <alias>calypso</alias>
+                            <storepass>calypso</storepass>
+                            <excludes>
+                                <exclude>**/*-${calypso.version}.?ar</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>2.6</version>
+                        <executions>
+                            <!-- Copy the development jars into the correct location -->
+                            <execution>
+                                <id>copy development dependencies</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/classes/application-jars</outputDirectory>
+                                    <overWriteReleases>true</overWriteReleases>
+                                    <overWriteSnapshots>true</overWriteSnapshots>
+                                    <overWriteIfNewer>true</overWriteIfNewer>
+                                    <includeGroupIds>${project.parent.groupId}</includeGroupIds>
+                                    <includeArtifactIds>config, custom, hotfixes</includeArtifactIds>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <excludeTransitive>true</excludeTransitive>
+                            <includeScope>runtime</includeScope>
+                            <regenerateFile>true</regenerateFile>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!-- The profile that skips signing any jar files -->
+        <profile>
+            <id>nosign</id>
+        </profile>
+    </profiles>
+</project>

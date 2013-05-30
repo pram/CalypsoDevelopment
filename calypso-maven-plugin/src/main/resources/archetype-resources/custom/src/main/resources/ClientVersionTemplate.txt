@@ -1,0 +1,84 @@
+package calypsox.tk.util;
+
+import java.awt.*;
+import javax.swing.*;
+
+import com.calypso.tk.util.ClientVersionInterface;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
+/**
+ * This class implements the <code>com.calypso.tk.util.ClientVersionInterface</code>
+ * Interface.
+ *
+ * This Interface can be used to display your own version number and
+ * date at the Login Screen.
+ */
+public class ClientVersion implements ClientVersionInterface  {
+
+    public String getName() {
+	return new String("@BUILD-NAME@");
+    }
+
+    public String getVersion() {
+	return new String("@BUILD-VERSION@");
+    }
+
+    public String getVersionDate() {
+	return new String("@BUILD-DATE@");
+    }
+
+
+    public Component getGUIComponent(){
+
+        JPanel panel = new JPanel();
+		panel.setLayout(null);
+        panel.setSize(350,230);
+		
+        JLabel jLabel1 = new JLabel();
+        JScrollPane jScrollPane1 = new JScrollPane();
+        JTextArea jTextArea1 = new JTextArea();
+
+		
+        jLabel1.setFont(new java.awt.Font("Dialog", 0, 29));
+        jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
+        jLabel1.setHorizontalTextPosition(SwingConstants.TRAILING);
+        jLabel1.setIconTextGap(4);
+        jLabel1.setText("DISCLAIMER");
+        jLabel1.setBounds(new Rectangle(62, 10, 225, 50));
+
+		
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("Access to this application is for authorized users\n");
+        buffer.append("only. Unauthorized and/or inappropriate use,\n");
+        buffer.append("including exceeding authorization, is strictly\n");
+        buffer.append("prohibited and may subject said user(s) to civil\n");
+        buffer.append("and criminal penalties. \n\n");
+        buffer.append("Employees may also be subject to disciplinary\n");
+        buffer.append("action, including termination. Application use\n");
+        buffer.append("may be monitored and recorded. Use of this\n");
+        buffer.append("application constitutes consent to any such\n");
+        buffer.append("monitoring.");
+        jTextArea1.setText(buffer.toString());
+        jTextArea1.setEditable(false);		
+        jScrollPane1.setBounds(new Rectangle(25, 75, 300, 140));
+		
+        panel.add(jLabel1, null);
+        panel.add(jScrollPane1, null);
+        jScrollPane1.getViewport().add(jTextArea1, null);
+        panel.setBackground(new Color(255,156,113));
+		
+        BufferedImage image;
+
+      try {                
+			image = ImageIO.read(this.getClass().getResource("/clientlogo.png"));
+		  	JLabel wIcon = new JLabel(new ImageIcon( image ));
+			panel.add(wIcon);
+       } catch (IOException ex) {
+            // handle exception...
+       }	
+		
+        return panel;
+    }
+}

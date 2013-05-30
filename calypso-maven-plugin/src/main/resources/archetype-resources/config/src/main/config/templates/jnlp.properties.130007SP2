@@ -1,0 +1,4 @@
+apps=com.calypso.apps.startup.StartMainEntry;com.calypso.apps.startup.StartAdmin;com.calypso.apps.datamigration.MigratorGUI;com.calypso.apps.datamigration.MigratorCMGUI
+jars=@CLASSPATH@
+args=-log;-env;@DS_NAME@;-envlist;@DS_NAME@
+vmargs=-XX:MaxPermSize=256m -Xms756m -Xmx1024m

@@ -40,5 +40,33 @@
                 <version>${calypso.maven.plugin.version}</version>
             </plugin>
         </plugins>
+<pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.4</version>
+                    <configuration>
+                        <archive>
+                            <index>true</index>
+                            <manifest>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            </manifest>
+                        </archive>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
+<modules>
+		<module>hotfixes</module>
+		<module>config</module>
+		<module>custom</module>
+		<module>scripts</module>
+		<!-- Uncomment one or both web modules for WebStart deployment -->
+		<!--module>web-static</module-->
+		<!--module>web</module-->		
+		<module>releases</module>
+	</modules>
 </project>

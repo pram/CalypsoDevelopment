@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- application/x-java-jnlp-file -->
+<jnlp spec="1.0+" codebase="http://@CALYPSO_WEB_SERVER_HOST@:@CALYPSO_WEB_SERVER_PORT@/@DS_NAME@" href="me-launch.jnlp">
+
+	<information>
+		<title>Calypso com.calypso.apps.startup.StartMainEntry Application</title>
+		<vendor>Calypso Technology, Inc.</vendor>
+		<homepage href="http://@CALYPSO_WEB_SERVER_HOST@:@CALYPSO_WEB_SERVER_PORT@/@DS_NAME@/"/>
+		<icon href="images/logo.gif"/>
+		<offline-allowed/>
+	</information>
+
+	<security>
+		<all-permissions/>
+	</security>
+
+	<resources>
+       <j2se version="1.6+" initial-heap-size="512m" max-heap-size="756m" java-vm-args="-XX:PermSize=128m"/>
+       <property name="sun.rmi.dgc.client.gcInterval" value="3600000"/>
+        <!-- <property name="sun.rmi.dgc.server.gcInterval" value="3600000"/> -->
+
+         <!-- Setting look & feel -->
+         <property name="swing.defaultlaf" value="@NIMROD.SWING.DEFAULTLAF@"/>
+         <property name="nimrodlf.p1" value="@NIMRODLF.P1@"/>
+         <property name="nimrodlf.p2" value="@NIMRODLF.P2@"/>
+         <property name="nimrodlf.p3" value="@NIMRODLF.P3@"/>
+         <property name="nimrodlf.s1" value="@NIMRODLF.S1@"/>
+         <property name="nimrodlf.s2" value="@NIMRODLF.S2@"/>
+         <property name="nimrodlf.s3" value="@NIMRODLF.S3@"/>
+         <property name="nimrodlf.w" value="@NIMRODLF.W@"/>
+         <property name="nimrodlf.b" value="@NIMRODLF.B@"/>
+         <property name="nimrodlf.font" value="@NIMRODLF.FONT@"/>
+         <property name="nimrodlf.menuOpacity" value="@NIMRODLF.MENUOPACITY@"/>
+         <property name="nimrodlf.frameOpacity" value="@NIMRODLF.FRAMEOPACITY@"/>
+
+        <!-- JMX Monitoring Bean enablement
+        <property name="com.sun.management.jmxremote.port" value="@JMX_PORT@"/>
+        <property name="com.sun.management.jmxremote.authenticate" value="@JMX_SEC@" />
+
+		<!-- auto generated jar list -->
+		@JAR_LIST@
+        <jar href="application-jars/resources.jar" main="false"/>
+
+	</resources>
+
+	<application-desc main-class="com.calypso.apps.startup.StartMainEntry">
+		<argument>-log</argument><argument>-env</argument><argument>@DS_NAME@</argument><argument>-envlist</argument><argument>@DS_NAME@</argument>
+	</application-desc>
+</jnlp>

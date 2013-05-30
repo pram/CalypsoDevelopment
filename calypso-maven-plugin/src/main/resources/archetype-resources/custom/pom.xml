@@ -20,7 +20,120 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <generated.sources.dir>${project.build.directory}/generated-sources</generated.sources.dir>
+        <BUILD-NAME>devbuild</BUILD-NAME>
+        <BUILD-VERSION>${project.parent.version}</BUILD-VERSION>
+        <BUILD-DATE>${maven.build.timestamp}</BUILD-DATE>
     </properties>
 
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <!-- Add am additional source path for generated sources -->
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${generated.sources.dir}</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <!-- Copy the client version template into the correct position in the generated sources folder -->
+                    <execution>
+                        <id>copy-clientversion-template</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <target>                                
+                                <copy file="${project.basedir}/src/main/resources/ClientVersionTemplate.txt" toFile="${generated.sources.dir}/calypsox/tk/util/ClientVersion.java"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.2</version>
+                <executions>
+                    <!-- Add the current client version details -->
+                    <execution>
+                        <id>process client version file</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <file>${generated.sources.dir}/calypsox/tk/util/ClientVersion.java</file>
+                            <replacements>
+                                <replacement>
+                                    <token>@BUILD-NAME@</token>
+                                    <value>${BUILD-NAME}</value>
+                                </replacement>
+                                <replacement>
+                                    <token>@BUILD-VERSION@</token>
+                                    <value>${BUILD-VERSION}</value>
+                                </replacement>
+                                <replacement>
+                                    <token>@BUILD-DATE@</token>
+                                    <value>${BUILD-DATE}</value>
+                                </replacement>
+                            </replacements>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>1.5</version>
+                <!-- Generate source files based on any xsd schemas -->
+                <executions>
+                    <execution>
+                        <id>xjc</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <packageName>${groupId}</packageName>
+                    <outputDirectory>${generated.sources.dir}</outputDirectory>
+                    <clearOutputDir>false</clearOutputDir>
+                </configuration>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <excludes>
+                    <exclude>ClientVersionTemplate.txt</exclude>
+                    <exclude>images/**</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources/images</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 </project>

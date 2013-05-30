@@ -20,12 +20,16 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <calypso.unpacked.release>${project.build.directory}/unpacked/${calypso.version}</calypso.unpacked.release>
-        <mache.version>1.0-SNAPSHOT</mache.version>
+        <calypso.unpacked.release>${project.basedir}/initial/unpacked/${calypso.version}</calypso.unpacked.release>
+        <mache.version>1.0</mache.version>
         <!-- For an explanation of how to split out the classes folder on a per profile basis look here
          http://www.jroller.com/eu/entry/configuring_separate_maven_output_folders-->
         <target.dir>target</target.dir>
         <classes.dir>classes</classes.dir>
+        <publish.password/>
+        <publish.config.dir>${project.build.directory}/publish.config</publish.config.dir>
+        <release.deployment.dir>${project.build.directory}/deployment</release.deployment.dir>
+        <quick.deployment.dir>${project.build.directory}/quick-deploy</quick.deployment.dir>
     </properties>
 
     <dependencies>
@@ -39,7 +43,7 @@
             <groupId>${groupId}</groupId>
             <artifactId>custom</artifactId>
             <version>${version}</version>
-            <scope>runtime</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>${groupId}</groupId>
@@ -53,159 +57,251 @@
             <version>${version}</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.naughtyzombie.mache</groupId>
-            <artifactId>mache</artifactId>
-            <version>${mache.version}</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <build>
-        <outputDirectory>${basedir}/${target.dir}/${classes.dir}</outputDirectory>
+        <outputDirectory>${release.deployment.dir}</outputDirectory>
         <testOutputDirectory>${basedir}/${target.dir}/test-{classes.dir}</testOutputDirectory>
-        <plugins>
-            <plugin>
-                <groupId>com.naughtyzombie.calypso.maven</groupId>
-                <artifactId>calypso-maven-plugin</artifactId>
-                <version>${calypso.maven.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>generate-classpath-windows</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>build-classpath</goal>
-                        </goals>
-                        <configuration>
-                            <scope>runtime</scope>
-                            <pathSeparator>;</pathSeparator>
-                            <prefix>..\jars</prefix>
-                            <fileSeparator>\</fileSeparator>
-                            <outputFile>${project.build.directory}/deployment/bin/classpath.windows</outputFile>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>generate-classpath-unix</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>build-classpath</goal>
-                        </goals>
-                        <configuration>
-                            <scope>runtime</scope>
-                            <pathSeparator>:</pathSeparator>
-                            <prefix>../jars</prefix>
-                            <fileSeparator>/</fileSeparator>
-                            <outputFile>${project.build.directory}/deployment/bin/classpath.unix</outputFile>
-                        </configuration>
-                    </execution>
-                </executions>
-                <configuration>
-                    <managementModule>true</managementModule>
-                    <processCatalog>FULL</processCatalog>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.naughtyzombie.mache</groupId>
-                        <artifactId>mache</artifactId>
-                        <version>${mache.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <id>copy-deployment</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/deployment</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.build.directory}/unpacked/${calypso.version}</directory>
-                                    <excludes>
-                                        <exclude>samples/**/*</exclude>
-                                        <exclude>META-INF/**/*</exclude>
-                                        <exclude>legal/**/*</exclude>
-                                        <exclude>jars/**/*</exclude>
-                                        <exclude>jar-src/**/*</exclude>
-                                        <exclude>html/**/*</exclude>
-                                        <exclude>docs/**/*</exclude>
-                                        <exclude>*.txt</exclude>
-                                    </excludes>
-                                    <filtering>false</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <id>copy-calypso-jars</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/deployment/jars</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-calypso-scripts</id>
-                        <phase>process-sources</phase>
-                        <goals>
-                            <goal>unpack-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/deployment</outputDirectory>
-                            <includeGroupIds>${project.parent.groupId}</includeGroupIds>
-                            <excludes>META-INF/**</excludes>
-                            <includeArtifactIds>scripts</includeArtifactIds>
-                        </configuration>
-                    </execution>
-                </executions>
-                <configuration>
-                    <overWriteReleases>false</overWriteReleases>
-                    <overWriteSnapshots>true</overWriteSnapshots>
-                    <overWriteIfNewer>true</overWriteIfNewer>
-                    <excludeTransitive>true</excludeTransitive>
-                    <includeScope>runtime</includeScope>
-                    <regenerateFile>true</regenerateFile>
-                </configuration>
-            </plugin>
-        </plugins>
-        <resources>
-            <resource>
-                <directory>${project.basedir}/src/main/resources</directory>
-                <excludes>
-                    <exclude>**/calypsorel*.jar</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <directory>${project.build.directory}/deployment</directory>
-                <filtering>false</filtering>
-            </resource>
-        </resources>
     </build>
 
     <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.naughtyzombie.calypso.maven</groupId>
+                        <artifactId>calypso-maven-plugin</artifactId>
+                        <version>${calypso.maven.plugin.version}</version>
+                        <executions>
+                            <!-- Generate a windows style classpath file -->
+                            <execution>
+                                <id>generate-classpath-windows</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>build-classpath</goal>
+                                </goals>
+                                <configuration>
+                                    <scope>runtime</scope>
+                                    <pathSeparator>;
+                                        SET CLASSPATH=%CLASSPATH%;
+                                    </pathSeparator>
+                                    <prefix>%CALYPSO_HOME%\\jars</prefix>
+                                    <fileSeparator>\\</fileSeparator>
+                                    <outputFile>${release.deployment.dir}/bin/classpath.windows</outputFile>
+                                </configuration>
+                            </execution>
+                            <!-- Generate a unix style classpath file -->
+                            <execution>
+                                <id>generate-classpath-unix</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>build-classpath</goal>
+                                </goals>
+                                <configuration>
+                                    <scope>runtime</scope>
+                                    <pathSeparator>:</pathSeparator>
+                                    <prefix>$CALYPSO_HOME/jars</prefix>
+                                    <fileSeparator>/</fileSeparator>
+                                    <outputFile>${release.deployment.dir}/bin/classpath.unix</outputFile>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <managementModule>true</managementModule>
+                            <processCatalog>FULL</processCatalog>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.naughtyzombie.mache</groupId>
+                                <artifactId>mache</artifactId>
+                                <version>${mache.version}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.6</version>
+                        <executions>
+                            <!-- Copy the resources folder from the Calypso release in to the deployment staging area. Exclude anything that is either redundant to managed elsewhere -->
+                            <execution>
+                                <id>copy-deployment</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${release.deployment.dir}</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${calypso.unpacked.release}</directory>
+                                            <excludes>
+                                                <exclude>samples/**/*</exclude>
+                                                <exclude>META-INF/**/*</exclude>
+                                                <exclude>legal/**/*</exclude>
+                                                <exclude>jars/**/*</exclude>
+                                                <exclude>jar-src/**/*</exclude>
+                                                <exclude>html/**/*</exclude>
+                                                <exclude>docs/**/*</exclude>
+                                                <exclude>*.txt</exclude>
+                                            </excludes>
+                                            <filtering>false</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>2.6</version>
+                        <executions>
+                            <!-- Copy the dependent jars into the deployment area-->
+                            <execution>
+                                <id>copy-calypso-jars</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${release.deployment.dir}/jars</outputDirectory>
+                                </configuration>
+                            </execution>
+                            <!-- Copy the scripts module into the deployment area -->
+                            <execution>
+                                <id>copy-calypso-scripts</id>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>unpack-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${release.deployment.dir}</outputDirectory>
+                                    <includeGroupIds>${project.parent.groupId}</includeGroupIds>
+                                    <excludes>META-INF/**</excludes>
+                                    <includeArtifactIds>scripts</includeArtifactIds>
+                                </configuration>
+                            </execution>
+                            <!-- Copy the updated resources from the hotfix module into the deployment area -->
+                            <execution>
+                                <id>copy-calypso-dbscripts</id>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>unpack-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${release.deployment.dir}</outputDirectory>
+                                    <includeGroupIds>${project.parent.groupId}</includeGroupIds>
+                                    <includes>bin/**</includes>
+                                    <includeArtifactIds>hotfixes</includeArtifactIds>
+                                </configuration>
+                            </execution>
+                            <!-- Unpack the Look and Feel files -->
+                            <execution>
+                                <id>copy-calypso-laf</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>unpack-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${release.deployment.dir}/bin</outputDirectory>
+                                    <includeGroupIds>${project.parent.groupId}</includeGroupIds>
+                                    <includes>laf*</includes>
+                                    <includeArtifactIds>config</includeArtifactIds>
+                                </configuration>
+                            </execution>
+                            <!-- Copy the web static files into the correct location -->
+                            <execution>
+                                <id>copy-static-app</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>${project.groupId}</groupId>
+                                            <artifactId>web-static</artifactId>
+                                            <version>${project.version}</version>
+                                            <outputDirectory>${release.deployment.dir}/pub</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <excludeTransitive>true</excludeTransitive>
+                            <includeScope>runtime</includeScope>
+                            <regenerateFile>true</regenerateFile>
+                        </configuration>
+                    </plugin>
+                </plugins>
+                <resources>
+                    <resource>
+                        <directory>${project.basedir}/src/main/resources</directory>
+                        <excludes>
+                            <exclude>**/calypsorel*.jar</exclude>
+                        </excludes>
+                    </resource>
+                    <resource>
+                        <directory>${release.deployment.dir}</directory>
+                        <filtering>false</filtering>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+        <!-- The process to be run initially  -->
         <profile>
             <id>initial</id>
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>2.6</version>
+                        <executions>
+                            <!-- Copy the calypso release from the maven repo -->
+                            <execution>
+                                <id>unpack</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>com.calypso.release</groupId>
+                                            <artifactId>calypsorel</artifactId>
+                                            <version>${calypso.version}</version>
+                                            <type>jar</type>
+                                            <outputDirectory>${project.basedir}/src/main/resources</outputDirectory>
+                                            <destFileName>calypsorel${calypso.version}.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <excludeTransitive>true</excludeTransitive>
+                            <includeScope>runtime</includeScope>
+                            <regenerateFile>true</regenerateFile>
+                        </configuration>
+                    </plugin>
+                    <plugin>
                         <artifactId>maven-antrun-plugin</artifactId>
                         <version>1.7</version>
                         <executions>
+                            <!-- Explode the calypso release except for the embedded jar files. These are being maintained separately in the repo -->
                             <execution>
                                 <phase>process-resources</phase>
                                 <goals>
@@ -213,7 +309,8 @@
                                 </goals>
                                 <configuration>
                                     <target>
-                                        <unjar src="${project.basedir}/src/main/resources/calypsorel${calypso.version}.jar" dest="${calypso.unpacked.release}"/>
+                                        <unjar src="${project.basedir}/src/main/resources/calypsorel${calypso.version}.jar"
+                                               dest="${calypso.unpacked.release}"/>
                                         <delete>
                                             <fileset dir="${project.build.outputDirectory}" includes="**/*.jar"/>
                                         </delete>
@@ -249,12 +346,13 @@
                 </plugins>
             </build>
         </profile>
+        <!-- A profile that allows execution of Calypso app starter. Must be run at least once in order to construct the resources required -->
         <profile>
-            <id>test</id>
-            <properties>                
+            <id>run-calypso</id>
+            <properties>
                 <classes.dir>tmpclasses</classes.dir>
-            </properties>            
-            <build>                
+            </properties>
+            <build>
                 <plugins>
                     <plugin>
                         <groupId>com.naughtyzombie.calypso.maven</groupId>
@@ -277,8 +375,80 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>1.2.1</version>
                         <executions>
+                            <!-- Run the app starter application -->
                             <execution>
-                                <phase>compile</phase>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-Xms256m</argument>
+                                <argument>-Xmx256m</argument>
+                                <argument>-XX:NewRatio=3</argument>
+                                <argument>-XX:+PrintGCTimeStamps</argument>
+                                <argument>-XX:+PrintGCDetails</argument>
+                                <argument>-Xloggc:gc.log</argument>
+                                <argument>-classpath</argument>
+                                <classpath/>
+                                <argument>com.calypso.apps.startup.StartAppWindow</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>2.6</version>
+                    </plugin>
+                </plugins>
+                <resources>
+                    <resource>
+                        <directory>${calypso.unpacked.release}/resources</directory>
+                    </resource>
+                    <resource>
+                        <directory>${calypso.unpacked.release}/resources/appconfig</directory>
+                    </resource>
+                    <resource>
+                        <directory>${calypso.unpacked.release}/resources/log4jconfig</directory>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+        <!-- Run app starter in a shorter amount of time 'run-calypso' must be executed at least once before this will work -->
+        <profile>
+            <id>run-calypso-quick</id>
+            <properties>
+                <classes.dir>tmpclasses</classes.dir>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.naughtyzombie.calypso.maven</groupId>
+                        <artifactId>calypso-maven-plugin</artifactId>
+                        <version>${calypso.maven.plugin.version}</version>
+                        <configuration>
+                            <managementModule>true</managementModule>
+                            <processCatalog>FULL</processCatalog>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.naughtyzombie.mache</groupId>
+                                <artifactId>mache</artifactId>
+                                <version>${mache.version}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2.1</version>
+                        <executions>
+                            <!-- Run the app starter application -->
+                            <execution>
+                                <phase>validate</phase>
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
@@ -307,15 +477,461 @@
                 </plugins>
                 <resources>
                     <resource>
-                        <directory>${project.build.directory}/unpacked/${calypso.version}/resources</directory>
+                        <directory>${calypso.unpacked.release}/resources</directory>
                     </resource>
                     <resource>
-                        <directory>${project.build.directory}/unpacked/${calypso.version}/resources/appconfig</directory>                       
+                        <directory>${calypso.unpacked.release}/resources/appconfig</directory>
                     </resource>
-                    <resource>                        
-                        <directory>${project.build.directory}/unpacked/${calypso.version}/resources/log4jconfig</directory>
+                    <resource>
+                        <directory>${calypso.unpacked.release}/resources/log4jconfig</directory>
                     </resource>
                 </resources>
+            </build>
+        </profile>
+        <!-- A profile to start a local instance of ActiveMQ that will allow for JMS based testing -->
+        <profile>
+            <id>run-activemq</id>
+            <properties>
+                <classes.dir>tmpclasses</classes.dir>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.naughtyzombie.calypso.maven</groupId>
+                        <artifactId>calypso-maven-plugin</artifactId>
+                        <version>${calypso.maven.plugin.version}</version>
+                        <configuration>
+                            <managementModule>true</managementModule>
+                            <processCatalog>FULL</processCatalog>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.naughtyzombie.mache</groupId>
+                                <artifactId>mache</artifactId>
+                                <version>${mache.version}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2.1</version>
+                        <executions>
+                            <!-- Start the ActiveMQ application -->
+                            <execution>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-Xms512m</argument>
+                                <argument>-Xmx512m</argument>
+                                <argument>-XX:NewRatio=3</argument>
+                                <argument>-XX:+PrintGCTimeStamps</argument>
+                                <argument>-XX:+PrintGCDetails</argument>
+                                <argument>-Xloggc:gc.log</argument>
+                                <argument>-classpath</argument>
+                                <classpath/>
+                                <argument>org.apache.activemq.console.command.ShellCommand</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>2.6</version>
+                    </plugin>
+                </plugins>
+                <resources>
+                    <resource>
+                        <directory>${calypso.unpacked.release}/resources</directory>
+                    </resource>
+                    <resource>
+                        <directory>${calypso.unpacked.release}/resources/appconfig</directory>
+                    </resource>
+                    <resource>
+                        <directory>${calypso.unpacked.release}/resources/log4jconfig</directory>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+        <!-- A profile to deploy the release onto a server -->
+        <profile>
+            <id>publish</id>
+            <properties>
+                <scp.password>${publish.password}</scp.password>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>properties-maven-plugin</artifactId>
+                        <version>1.0-alpha-2</version>
+                        <executions>
+                            <!-- Load the environment specific properties -->
+                            <execution>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>read-project-properties</goal>
+                                </goals>
+                                <configuration>
+                                    <files>
+                                        <file>${publish.config.dir}/publish.${calypso.env}</file>
+                                    </files>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <!-- Carry out the installation commands on the target server -->
+                            <execution>
+                                <id>scp</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <tasks>
+                                        <tstamp/>
+                                        <property name="backup.dir" value="${PUBLISH_BASEDIR}/backup"/>
+                                        <property name="temp.dir" value="${PUBLISH_BASEDIR}/temp"/>
+                                        <property name="calypso.install.dir" value="${PUBLISH_BASEDIR}/${calypso.env}"/>
+                                        <property name="full.timestamp" value="${DSTAMP}${TSTAMP}"/>
+                                        <property name="env.temp.dir"
+                                                  value="${temp.dir}/${calypso.env}_${full.timestamp}"/>
+                                        <property name="file.name"
+                                                  value="${project.build.finalName}.${project.packaging}"/>
+
+                                        <macrodef name="ssh">
+                                            <attribute name="cmd" default="echo HELLO CALYPSO"/>
+                                            <attribute name="failOnError" default="true"/>
+                                            <sequential>
+                                                <sshexec host="${PUBLISH_SERVER_HOST}" username="${PUBLISH_SERVER_USER}"
+                                                         password="${scp.password}" command="@{cmd}" trust="true"
+                                                         failonerror="@{failOnError}"/>
+                                            </sequential>
+                                        </macrodef>
+
+                                        <ssh cmd="${calypso.install.dir}/bin/calstart.sh stop all"/>
+                                        <ssh cmd="mkdir ${backup.dir}" failOnError="false"/>
+                                        <ssh cmd="tar czf ${backup.dir}/${calypso.env}_${full.timestamp}.tar.gz ${PUBLISH_BASEDIR}/${calypso.env}"
+                                             failOnError="false"/>
+                                        <ssh cmd="mkdir -p ${env.temp.dir}" failOnError="false"/>
+
+                                        <scp todir="${PUBLISH_SERVER_USER}:${scp.password}@${PUBLISH_SERVER_HOST}:${env.temp.dir}"
+                                             trust="true" failonerror="false">
+                                            <fileset dir="${project.build.directory}">
+                                                <include name="${file.name}"/>
+                                            </fileset>
+                                        </scp>
+
+                                        <ssh cmd="rm -rf ${calypso.install.dir}"/>
+                                        <ssh cmd="mkdir ${calypso.install.dir}"/>
+                                        <ssh cmd="unzip ${env.temp.dir}/${file.name} -d ${calypso.install.dir}"/>
+                                        <ssh cmd="find ${calypso.install.dir}/bin -type f -exec dos2unix {} \;"/>
+                                        <ssh cmd="chmod 755 ${calypso.install.dir}/bin/calstart.sh"/>
+                                        <ssh cmd="chmod 755 ${calypso.install.dir}/bin/dataupload.sh"/>
+                                        <ssh cmd="cp ${calypso.install.dir}/pub/me-launch.jnlp.${calypso.env} ${calypso.install.dir}/pub/me-launch.jnlp"/>
+                                        <ssh cmd="chmod -R 755 ${calypso.install.dir}/pub"/>
+
+                                    </tasks>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant-jsch</artifactId>
+                                <version>1.7.1</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>com.jcraft</groupId>
+                                <artifactId>jsch</artifactId>
+                                <version>0.1.49</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <version>1.2</version>
+                        <executions>
+                            <!-- Ensure that the mandatory environment properties have been set -->
+                            <execution>
+                                <id>enforce-property</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireProperty>
+                                            <property>publish.password</property>
+                                            <message>You must set a publish.password property! Add
+                                                -Dpublish.password=env_name to the end of the maven command.
+                                            </message>
+                                            <regex>.+</regex>
+                                            <regexMessage>publish.password must not be empty</regexMessage>
+                                        </requireProperty>
+                                        <requireProperty>
+                                            <property>calypso.env</property>
+                                            <message>You must set a calypso.env property! Add -Dcalypso.env=env_name to
+                                                the end of the maven command.
+                                            </message>
+                                        </requireProperty>
+                                    </rules>
+                                    <fail>true</fail>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>2.6</version>
+                        <executions>
+                            <!-- Extract environment specific settings -->
+                            <execution>
+                                <id>unpack-publish-config</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>unpack-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${publish.config.dir}</outputDirectory>
+                                    <includeGroupIds>${project.parent.groupId}</includeGroupIds>
+                                    <includes>publish.*</includes>
+                                    <includeArtifactIds>config</includeArtifactIds>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <excludeTransitive>true</excludeTransitive>
+                            <includeScope>runtime</includeScope>
+                            <regenerateFile>true</regenerateFile>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>quick-publish</id>
+            <properties>
+                <scp.password>${publish.password}</scp.password>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <version>1.2</version>
+                        <executions>
+                            <!-- Ensure that the mandatory environment properties have been set -->
+                            <execution>
+                                <id>enforce-property</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <requireProperty>
+                                            <property>publish.password</property>
+                                            <message>You must set a publish.password property! Add
+                                                -Dpublish.password=env_name to the end of the maven command.
+                                            </message>
+                                            <regex>.+</regex>
+                                            <regexMessage>publish.password must not be empty</regexMessage>
+                                        </requireProperty>
+                                        <requireProperty>
+                                            <property>calypso.env</property>
+                                            <message>You must set a calypso.env property! Add -Dcalypso.env=env_name to
+                                                the end of the maven command.
+                                            </message>
+                                        </requireProperty>
+                                    </rules>
+                                    <fail>true</fail>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>properties-maven-plugin</artifactId>
+                        <version>1.0-alpha-2</version>
+                        <executions>
+                            <!-- Load the environment specific properties -->
+                            <execution>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>read-project-properties</goal>
+                                </goals>
+                                <configuration>
+                                    <files>
+                                        <file>${publish.config.dir}/publish.${calypso.env}</file>
+                                    </files>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>2.6</version>
+                        <executions>
+                            <execution>
+                                <id>copy-calypso-scripts</id>
+                            </execution>
+                            <execution>
+                                <id>copy development dependencies</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${quick.deployment.dir}/jars</outputDirectory>
+                                    <includeArtifactIds>config, custom, hotfixes</includeArtifactIds>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>copy development dependencies to sign</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${quick.deployment.dir}/application-jars</outputDirectory>
+                                    <includeArtifactIds>config, custom, hotfixes</includeArtifactIds>
+                                </configuration>
+                            </execution>
+                            <!-- Extract environment specific settings -->
+                            <execution>
+                                <id>unpack-publish-config</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>unpack-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${publish.config.dir}</outputDirectory>
+                                    <includeGroupIds>${project.parent.groupId}</includeGroupIds>
+                                    <includes>publish.*</includes>
+                                    <includeArtifactIds>config</includeArtifactIds>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <excludeTransitive>true</excludeTransitive>
+                            <includeScope>runtime</includeScope>
+                            <regenerateFile>true</regenerateFile>
+                            <includeGroupIds>${project.parent.groupId}</includeGroupIds>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jarsigner-plugin</artifactId>
+                        <version>1.2</version>
+                        <executions>
+                            <execution>
+                                <id>sign</id>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <archiveDirectory>${quick.deployment.dir}/application-jars</archiveDirectory>
+                            <keystore>${project.basedir}/sign/calypsoJAWS.key</keystore>
+                            <alias>calypso</alias>
+                            <storepass>calypso</storepass>
+                            <excludes>
+                                <exclude>**/*-${calypso.version}.?ar</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <!-- Carry out the installation commands on the target server -->
+                            <execution>
+                                <id>scp</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <tasks>
+                                        <tstamp/>
+                                        <property name="backup.dir" value="${PUBLISH_BASEDIR}/backup"/>
+                                        <property name="temp.dir" value="${PUBLISH_BASEDIR}/temp"/>
+                                        <property name="calypso.install.dir" value="${PUBLISH_BASEDIR}/${calypso.env}"/>
+                                        <property name="full.timestamp" value="${DSTAMP}${TSTAMP}"/>
+                                        <property name="env.temp.dir"
+                                                  value="${temp.dir}/${calypso.env}_${full.timestamp}"/>
+                                        <property name="file.name"
+                                                  value="${project.build.finalName}.${project.packaging}"/>
+
+                                        <macrodef name="ssh">
+                                            <attribute name="cmd" default="echo HELLO CALYPSO"/>
+                                            <attribute name="failOnError" default="true"/>
+                                            <sequential>
+                                                <sshexec host="${PUBLISH_SERVER_HOST}" username="${PUBLISH_SERVER_USER}"
+                                                         password="${scp.password}" command="@{cmd}" trust="true"
+                                                         failonerror="@{failOnError}"/>
+                                            </sequential>
+                                        </macrodef>
+
+                                        <ssh cmd="${calypso.install.dir}/bin/calstart.sh stop all"/>
+                                        <ssh cmd="mkdir ${backup.dir}" failOnError="false"/>
+                                        <ssh cmd="tar cvzf ${backup.dir}/${calypso.env}_quick_${full.timestamp}.tar.gz ${PUBLISH_BASEDIR}/${calypso.env}/jars/*${project.version}* ${PUBLISH_BASEDIR}/${calypso.env}/pub/application-jars/*${project.version}*"
+                                             failOnError="false"/>
+
+                                        <scp todir="${PUBLISH_SERVER_USER}:${scp.password}@${PUBLISH_SERVER_HOST}:${PUBLISH_BASEDIR}/${calypso.env}/jars"
+                                             trust="true" failonerror="false">
+                                            <fileset dir="${quick.deployment.dir}/jars">
+                                                <include name="*"/>
+                                            </fileset>
+                                        </scp>
+
+                                        <scp todir="${PUBLISH_SERVER_USER}:${scp.password}@${PUBLISH_SERVER_HOST}:${PUBLISH_BASEDIR}/${calypso.env}/pub/application-jars"
+                                             trust="true" failonerror="false">
+                                            <fileset dir="${quick.deployment.dir}/application-jars">
+                                                <include name="*"/>
+                                            </fileset>
+                                        </scp>
+
+                                    </tasks>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant-jsch</artifactId>
+                                <version>1.7.1</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>com.jcraft</groupId>
+                                <artifactId>jsch</artifactId>
+                                <version>0.1.49</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
             </build>
         </profile>
     </profiles>
