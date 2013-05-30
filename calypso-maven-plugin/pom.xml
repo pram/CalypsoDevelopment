@@ -51,7 +51,7 @@
             <groupId>com.brsanthu</groupId>
             <artifactId>data-exporter</artifactId>
             <version>1.0.0</version>
-            <!-- http://code.google.com/p/data-exporter/wiki/UserGuide -->
+            <!-- http://code.google.com/p/data-exporter -->
             <!-- curl -O http://data-exporter.googlecode.com/files/data-exporter-1.0.0.jar -->
             <!-- mvn install:install-file -DgroupId=com.brsanthu -DartifactId=data-exporter -Dversion=1.0.0 -Dpackaging=jar -Dfile=data-exporter-1.0.0.jar-->
         </dependency>
@@ -69,6 +69,7 @@
             <groupId>dnl.utils</groupId>
             <artifactId>j-text-utils</artifactId>
             <version>0.3</version>
+	    <!-- https://code.google.com/p/j-text-utils/ -->
             <!-- curl -O http://j-text-utils.googlecode.com/files/j-text-utils-0.3.jar -->
             <!-- mvn install:install-file -DgroupId=dnl.utils -DartifactId=j-text-utils -Dversion=0.3 -Dpackaging=jar -Dfile=j-text-utils-0.3.jar -->
         </dependency>
