@@ -270,6 +270,30 @@
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <!-- Create the resources jar file -->
+                            <execution>
+                                <id>prepare resources</id>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <tasks>
+                                        <echo message="Re-index the jar files" />
+                                        <apply executable="jar" dir="${signed.jars.dir}" relative="true" verbose="true">
+                                            <arg value="-i"/>
+                                            <fileset dir="${signed.jars.dir}" includes="*.jar"/>
+                                        </apply>
+                                    </tasks>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jarsigner-plugin</artifactId>
                         <version>1.2</version>
                         <executions>
