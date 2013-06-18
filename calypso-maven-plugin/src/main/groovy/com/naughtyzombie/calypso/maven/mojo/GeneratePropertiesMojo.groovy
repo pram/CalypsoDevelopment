@@ -26,7 +26,7 @@ class GeneratePropertiesMojo extends GroovyMojo {
     private String src;
 
     /**
-     * The directory where source properties are located
+     * The directory where generated files will be placed
      *
      * To override use -Dout="blah"
      *
@@ -44,7 +44,7 @@ class GeneratePropertiesMojo extends GroovyMojo {
     private String templateFolder;
 
     /**
-     * The calypso release version for the templates
+     * The calypso release version for the templates. This must correspond to the version as stored in your Maven repo
      *
      * To override use -Dversion="blah"
      *
