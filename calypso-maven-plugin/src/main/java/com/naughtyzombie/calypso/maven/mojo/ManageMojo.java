@@ -40,8 +40,8 @@ public class ManageMojo extends AbstractMojo {
     private Boolean interactiveMode;
 
     /**
-     * The process catalogs to use to build a list and let the user choose from.
-     * Should be defined at compile time by the calling project
+     * The process catalog to use to build the management list from and to let the user choose processes from.
+     * Should be defined at compile time by the calling project.
      *
      * @parameter property="processCatalog" default-value="ALL"
      */
