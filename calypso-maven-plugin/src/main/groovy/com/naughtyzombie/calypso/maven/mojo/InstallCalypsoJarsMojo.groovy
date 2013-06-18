@@ -42,7 +42,7 @@ class InstallCalypsoJarsMojo extends GroovyMojo {
     private String version;
 
     /**
-     * Calypso version number
+     * Calypso Group
      *
      * @parameter property="group" default-value="${calypso.group}"
      */
