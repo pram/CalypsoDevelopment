@@ -4,7 +4,7 @@
     <groupId>com.naughtyzombie.calypso.maven</groupId>
     <artifactId>calypso-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.0</version>
+    <version>1.1</version>
     <name>Calypso Maven Plugin</name>
     <url>https://github.com/pram/CalypsoDevelopment</url>
     <dependencies>
@@ -63,7 +63,7 @@
         <dependency>
             <groupId>com.naughtyzombie.mache</groupId>
             <artifactId>mache</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
         <dependency>
             <groupId>dnl.utils</groupId>

@@ -215,7 +215,7 @@
                                 </configuration>
                             </execution>
                             <!-- Copy the web static files into the correct location -->
-                            <execution>
+                            <!--<execution>
                                 <id>copy-static-app</id>
                                 <phase>generate-resources</phase>
                                 <goals>
@@ -231,7 +231,7 @@
                                         </artifactItem>
                                     </artifactItems>
                                 </configuration>
-                            </execution>
+                            </execution>-->
                         </executions>
                         <configuration>
                             <overWriteReleases>false</overWriteReleases>

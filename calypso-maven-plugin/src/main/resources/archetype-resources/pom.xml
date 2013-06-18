@@ -60,11 +60,11 @@
         </pluginManagement>
     </build>
 <modules>
-		<module>hotfixes</module>
-		<module>config</module>
-		<module>custom</module>
-		<module>scripts</module>
-        <module>releases</module>
-        <!-- Comment one or both web modules if WebStart deployment not needed-->
-	</modules>
+    <module>hotfixes</module>
+    <module>config</module>
+    <module>custom</module>
+    <module>scripts</module>
+    <module>releases</module>
+    <!-- Comment one or both web modules if WebStart deployment not needed-->
+</modules>
 </project>

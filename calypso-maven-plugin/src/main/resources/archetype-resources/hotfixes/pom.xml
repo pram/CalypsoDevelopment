@@ -80,6 +80,8 @@
                         </goals>
                         <configuration>
                             <target>
+                                <!-- Prevent and exception on a fresh build -->
+                                <mkdir dir="${patch.jar.dir}"/>
                                 <unzip dest="${project.classes.dir}">
                                     <fileset dir="${patch.jar.dir}">
                                         <include name="**/*.jar" />

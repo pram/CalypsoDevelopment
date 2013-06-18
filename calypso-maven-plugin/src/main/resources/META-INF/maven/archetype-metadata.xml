@@ -2,7 +2,7 @@
 <archetype-descriptor name="basic">
     <requiredProperties>
         <requiredProperty key="archetypeVersion">
-            <defaultValue>1.0-SNAPSHOT</defaultValue>
+            <defaultValue>1.1</defaultValue>
         </requiredProperty>
         <requiredProperty key="calypsoVersion"/>
         <requiredProperty key="calypsoGroup">
@@ -42,6 +42,12 @@
             <fileSets>
                 <fileSet filtered="true" packaged="false">
                     <directory>src/main/java</directory>
+                    <includes>
+                        <include>**/*.*</include>
+                    </includes>
+                </fileSet>
+                <fileSet filtered="false" packaged="false">
+                    <directory>src/main/resources</directory>
                     <includes>
                         <include>**/*.*</include>
                     </includes>
