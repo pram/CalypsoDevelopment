@@ -65,6 +65,15 @@
                     <includes>
                         <include>**/*.*</include>
                     </includes>
+                    <excludes>
+                        <exclude>**/*.sh</exclude>
+                    </excludes>
+                </fileSet>
+                <fileSet filtered="false" packaged="false">
+                    <directory>src/main/resources</directory>
+                    <includes>
+                        <include>**/*.sh</include>
+                    </includes>
                 </fileSet>
             </fileSets>
         </module>
@@ -78,6 +87,38 @@
                 </fileSet>
                 <fileSet filtered="true" packaged="false">
                     <directory>src/main/resources</directory>
+                    <includes>
+                        <include>**/*.*</include>
+                    </includes>
+                </fileSet>
+            </fileSets>
+        </module>
+        <module id="web" dir="web" name="web">
+            <fileSets>
+                <fileSet filtered="false" packaged="false">
+                    <directory>src/main</directory>
+                    <includes>
+                        <include>**/*.*</include>
+                    </includes>
+                </fileSet>
+                <fileSet filtered="false" packaged="false">
+                    <directory>sign</directory>
+                    <includes>
+                        <include>**/*.*</include>
+                    </includes>
+                </fileSet>
+            </fileSets>
+        </module>
+        <module id="web-static" dir="web-static" name="web-static">
+            <fileSets>
+                <fileSet filtered="false" packaged="false">
+                    <directory>src/main</directory>
+                    <includes>
+                        <include>**/*.*</include>
+                    </includes>
+                </fileSet>
+                <fileSet filtered="false" packaged="false">
+                    <directory>sign</directory>
                     <includes>
                         <include>**/*.*</include>
                     </includes>

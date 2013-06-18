@@ -64,9 +64,7 @@
 		<module>config</module>
 		<module>custom</module>
 		<module>scripts</module>
-		<!-- Uncomment one or both web modules for WebStart deployment -->
-		<!--module>web-static</module-->
-		<!--module>web</module-->		
-		<module>releases</module>
+        <module>releases</module>
+        <!-- Comment one or both web modules if WebStart deployment not needed-->
 	</modules>
 </project>
