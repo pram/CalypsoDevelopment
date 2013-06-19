@@ -25,7 +25,7 @@
         <unpack.dir>${project.build.directory}/unpack</unpack.dir>
         <signed.jars.dir>${project.basedir}/initial/application-jars</signed.jars.dir>
         <generated.sources.dir>${project.build.directory}/generated-sources</generated.sources.dir>
-        <calypso.env>COPPER</calypso.env>
+        <calypso.env>DEV1</calypso.env>
         <web.root>${project.build.directory}/${project.artifactId}-${project.version}</web.root>
     </properties>
 
