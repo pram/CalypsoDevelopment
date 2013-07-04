@@ -118,7 +118,7 @@ to do this.
 
 To test that the install is working as expected on Windows run
 
-    mvn -P test -pl releases test
+    mvn -P run-calypso -pl releases test
 
 The AppStarter application will start. Make sure that there are no exceptions when launched.
 
