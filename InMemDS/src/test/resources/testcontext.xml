@@ -1,0 +1,22 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <import resource="defaultcontext.xml"/>
+
+    <bean id="dsTest" class="com.naughtyzombie.inmemds.TestInMemDSConnection" scope="singleton">
+        <property name="ds" ref="ds"/>
+    </bean>
+
+    <bean id="pricingEnv" class="java.lang.String">
+        <constructor-arg>
+            <value>Official</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="pricingTest" class="com.naughtyzombie.inmemds.TestTradePricing" scope="singleton">
+        <property name="ds" ref="ds"/>
+        <property name="peName" ref="pricingEnv"/>
+    </bean>
+</beans>

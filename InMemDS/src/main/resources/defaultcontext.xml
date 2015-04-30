@@ -1,0 +1,49 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config/>
+
+    <bean id="tradeServer" class="com.calypso.tk.service.TradeServerImpl"/>
+    <bean id="marketDataServer" class="com.calypso.tk.service.MarketDataServerImpl"/>
+    <bean id="accessServer" class="com.calypso.tk.service.AccessServerImpl14">
+        <constructor-arg><value>0</value></constructor-arg>
+    </bean>
+    <bean id="backOfficeServer" class="com.calypso.tk.service.BackOfficeServerImpl" lazy-init="true"/>
+    <bean id="referenceDataServer" class="com.calypso.tk.service.ReferenceDataServerImpl"/>
+    <bean id="productServer" class="com.calypso.tk.service.ProductServerImpl"/>
+    <bean id="accountingServer" class="com.calypso.tk.service.AccountingServerImpl"/>
+    <bean id="fxDataServer" class="com.calypso.tk.service.FXDataServerImpl"/>
+
+
+    <bean id="inMemDsInstance" class="com.naughtyzombie.inmemds.calypso.InMemDSConnection">
+        <property name="remoteTrade" ref="tradeServer"/>
+        <property name="remoteMarketData" ref="marketDataServer"/>
+        <property name="remoteAccess" ref="accessServer"/>
+        <!--<property name="remoteBO" ref="backOfficeServer"/>-->
+        <property name="remoteReferenceData" ref="referenceDataServer"/>
+        <property name="remoteProduct" ref="productServer"/>
+        <property name="remoteAccounting" ref="accountingServer"/>
+        <property name="remoteFXDataServer" ref="fxDataServer"/>
+        <constructor-arg><value>test</value></constructor-arg>
+    </bean>
+
+    <bean id="connectionString" class="java.lang.String">
+        <constructor-arg>
+            <value>jdbc:hsqldb:file:target/classes/InMemDS/InMemDS;ifexists=true;type=cached; shutdown=true</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="inMemDS" class="com.naughtyzombie.inmemds.calypso.InMemDSConnection" factory-method="initialize">
+        <constructor-arg ref="inMemDsInstance"/>
+    </bean>
+
+    <bean id="ds" class="com.calypso.tk.service.DSConnection" factory-method="getDefault"/>
+
+
+
+
+
+</beans>
