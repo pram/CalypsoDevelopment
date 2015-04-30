@@ -1,0 +1,105 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+
+	<artifactId>superengine</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>SuperEngine</name>
+	<description>ESB embedded within a Calypso Engine</description>
+	<url>http://work.naughtyzombie.com</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<generated.sources.dir>${project.build.directory}/generated-sources</generated.sources.dir>
+		<BUILD-NAME>devbuild</BUILD-NAME>
+		<BUILD-VERSION>${project.parent.version}</BUILD-VERSION>
+		<BUILD-DATE>${maven.build.timestamp}</BUILD-DATE>
+		<calypso.version>130007SP2</calypso.version>
+		<calypso.group>com.calypso</calypso.group>
+		<calypso.maven.plugin.version>1.0</calypso.maven.plugin.version>
+	</properties>
+
+<dependencies>
+	<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.calypso</groupId>
+			<artifactId>calypso-core</artifactId>
+			<version>130007SP2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.calypso</groupId>
+			<artifactId>calypso</artifactId>
+			<version>130007SP2</version>
+		</dependency>
+	<dependency>
+            <groupId>com.calypso</groupId>
+            <artifactId>mule</artifactId>
+            <version>130007SP2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.calypso</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>130007SP2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.calypso</groupId>
+            <artifactId>jaxen</artifactId>
+            <version>130007SP2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.calypso</groupId>
+            <artifactId>jug</artifactId>
+            <version>130007SP2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.calypso</groupId>
+            <artifactId>mvel2</artifactId>
+            <version>130007SP2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.calypso</groupId>
+            <artifactId>backport-util-concurrent</artifactId>
+            <version>130007SP2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.calypso</groupId>
+            <artifactId>wrapper</artifactId>
+            <version>130007SP2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.calypso</groupId>
+            <artifactId>stax-utils</artifactId>
+            <version>130007SP2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.calypso</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>130007SP2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.calypso</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>130007SP2</version>
+        </dependency>
+    </dependencies>
+
+	<build>
+		
+
+	</build>
+</project>
